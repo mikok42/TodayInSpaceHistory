@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
             
-                return true
+       return true
     }
 
     // MARK: UISceneSession Lifecycle

@@ -12,7 +12,16 @@ class MainViewViewModel {
     let dataGetter = HTTPRequestMaker()
     var dataSubscriber: AnyCancellable?
     var imageLinksSubscriber: AnyCancellable?
+    var currentItem: Item?
+    weak var viewControllerDelegate: ViewControllerDelegate?
+    
     var description: String?
+    var center: String?
+    var date_created: String?
+    var keywords: [String]?
+    var title: String?
+    
+    
     var imageLinks: [String]? {
         didSet {
             guard let images = imageLinks else { return }
@@ -35,13 +44,10 @@ class MainViewViewModel {
             self.currentItem = data?.collection.items?.randomElement()
             guard let url = currentItem?.href else { return }
             fetchImages(url: url)
-            self.description = currentItem?.data?.first?.description
-            print("Mikołaj: \(description)")
+            guard let result = currentItem?.data?.first else { return }
+            setData(result: result)
         }
     }
-    
-    var currentItem: Item?
-    weak var viewControllerDelegate: ViewControllerDelegate?
     
     func fetchData() {
         dataSubscriber = dataGetter.makeRequestAndParse(endpoint: .search, arguments: getCurrentDate())?
@@ -51,7 +57,7 @@ class MainViewViewModel {
                     case .finished:
                         print("alles in ordnung")
                     case .failure(let error):
-                        print("Mikołaj: err \(error)")
+                        print(error)
                     }
                 },
                 receiveValue: { data in
@@ -75,6 +81,14 @@ class MainViewViewModel {
                     
                     
         })
+    }
+    
+    private func setData(result: SearchResult) {
+        self.center = currentItem?.data?.first?.center
+        self.date_created = currentItem?.data?.first?.date_created
+        self.keywords = currentItem?.data?.first?.keywords
+        self.title = currentItem?.data?.first?.title
+        self.description = currentItem?.data?.first?.description
     }
     
     private func getCurrentDate() -> [String]{

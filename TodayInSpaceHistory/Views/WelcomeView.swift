@@ -9,8 +9,15 @@ import Foundation
 import SnapKit
 import Then
 import Kingfisher
+import UIKit
+
+protocol RefreshViewDelegate: AnyObject {
+    func refreshView()
+}
 
 class WelcomeView: UIView {
+    weak var refreshDelegate: RefreshViewDelegate?
+    
     init() {
         super.init(frame: .zero)
         self.backgroundColor = .black
@@ -34,6 +41,24 @@ class WelcomeView: UIView {
         $0.font = UIFont(name: Constants.fontName + Constants.lightFontMod, size: 20)
     }
     
+    private lazy var refreshButton = UIButton().then {
+        $0.setTitle("↺", for: .normal)
+        $0.backgroundColor = .clear
+        $0.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        $0.layer.cornerRadius = 0.5 * $0.bounds.size.width
+        
+        $0.addTarget(self, action: #selector(refreshButtonPressed(_:)), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(buttonLetGoOutside(_:)), for: .touchUpOutside)
+        $0.addTarget(self, action: #selector(buttonTouched), for: .touchDown)
+    }
+    
+    private lazy var titleLabel = UILabel().then {
+        $0.backgroundColor = .white.withAlphaComponent(0.5)
+        $0.font = UIFont(name: Constants.fontName + Constants.boldFontMod, size: 15)
+        $0.textColor = .black
+        $0.numberOfLines = 0
+    }
+    
     private lazy var descriptionLabel = UITextView().then {
         $0.backgroundColor = .black
         $0.textColor = .white
@@ -43,23 +68,25 @@ class WelcomeView: UIView {
     }
     
     private lazy var imageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 50.0
     }
     
     private func addSubviews() {
-        [welcomeLabel, dayLabel, imageView, descriptionLabel].forEach { addSubview($0) }
+        [welcomeLabel, dayLabel, imageView, descriptionLabel, titleLabel, refreshButton].forEach { addSubview($0) }
     }
     
     private func setupSubviews() {
         welcomeLabelSetup()
         dayLabelSetup()
         imageViewSetup()
+        titleLabelSetup()
         descriptionLabelSetup()
+        refreshButtonSetup()
     }
     
-    internal func populate(imageLink: String, description: String) {
+    internal func populate(imageLink: String, description: String, title: String) {
         imageView.kf.setImage(
             with: URL(string: imageLink),
             options: [.transition(.fade(0.2))]
@@ -70,6 +97,20 @@ class WelcomeView: UIView {
         let month = date.month
         dayLabel.text = [String(day), month].map ({ $0 }).joined(separator: " ")
         descriptionLabel.text = description
+        titleLabel.text = title
+    }
+    
+    @objc private func refreshButtonPressed(_ sender: UIButton) {
+        sender.alpha = 1
+        refreshDelegate?.refreshView()
+    }
+    
+    @objc private func buttonLetGoOutside(_ sender: UIButton) {
+        sender.alpha = 1
+    }
+    
+    @objc private func buttonTouched(_ sender: UIButton) {
+        sender.alpha = 0.5
     }
     
     //MARK: constraints setup
@@ -87,12 +128,27 @@ class WelcomeView: UIView {
         }
     }
     
+    private func titleLabelSetup() {
+        titleLabel.snp.makeConstraints {
+            $0.bottom.equalTo(imageView.snp.bottom).inset(20)
+            $0.leading.equalTo(imageView.snp.leading)
+            $0.trailing.equalTo(imageView.snp.centerX)
+        }
+    }
+    
     private func imageViewSetup() {
         imageView.snp.makeConstraints {
             $0.top.equalTo(dayLabel.snp.bottom).offset(Constants.labelsMargins)
-            $0.leading.equalTo(snp.leading).inset(5)
-            $0.trailing.equalTo(snp.trailing).inset(5)
-            $0.height.equalTo(UIScreen.main.bounds.width)
+            $0.leading.equalTo(snp.leading).inset(10)
+            $0.trailing.equalTo(snp.trailing).inset(10)
+            $0.height.equalTo(300)
+        }
+    }
+    
+    private func refreshButtonSetup() {
+        refreshButton.snp.makeConstraints {
+            $0.top.equalTo(welcomeLabel.snp.top)
+            $0.trailing.equalTo(snp.trailing).inset(15)
         }
     }
     

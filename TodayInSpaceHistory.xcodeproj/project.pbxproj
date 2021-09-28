@@ -20,6 +20,9 @@
 		D00F77022700B7730093E2E4 /* HTTPRequestMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F77012700B7730093E2E4 /* HTTPRequestMaker.swift */; };
 		D00F77072700BBDB0093E2E4 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F77062700BBDB0093E2E4 /* MainViewViewModel.swift */; };
 		D00F770B2700C0160093E2E4 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F770A2700C0160093E2E4 /* APIResponse.swift */; };
+		D0706A572703740A00CB1C89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0706A552703740A00CB1C89 /* Coordinator.swift */; };
+		D0706A582703740A00CB1C89 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0706A562703740A00CB1C89 /* MainCoordinator.swift */; };
+		D0706A5A270374C500CB1C89 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0706A59270374C500CB1C89 /* AlertController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,9 @@
 		D00F77012700B7730093E2E4 /* HTTPRequestMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPRequestMaker.swift; sourceTree = "<group>"; };
 		D00F77062700BBDB0093E2E4 /* MainViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
 		D00F770A2700C0160093E2E4 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
+		D0706A552703740A00CB1C89 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		D0706A562703740A00CB1C89 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		D0706A59270374C500CB1C89 /* AlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,9 @@
 		D00F76F42700A8330093E2E4 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				D0706A552703740A00CB1C89 /* Coordinator.swift */,
+				D0706A59270374C500CB1C89 /* AlertController.swift */,
+				D0706A562703740A00CB1C89 /* MainCoordinator.swift */,
 				D00F76FD2700B1FF0093E2E4 /* Constants.swift */,
 				D00F76FF2700B6320093E2E4 /* DateExtension.swift */,
 				D00F77012700B7730093E2E4 /* HTTPRequestMaker.swift */,
@@ -258,11 +267,14 @@
 				D00F77002700B6320093E2E4 /* DateExtension.swift in Sources */,
 				D00F77072700BBDB0093E2E4 /* MainViewViewModel.swift in Sources */,
 				D00F76FA2700A8640093E2E4 /* WelcomeView.swift in Sources */,
+				D0706A5A270374C500CB1C89 /* AlertController.swift in Sources */,
 				D00F76E32700A4700093E2E4 /* WelcomeViewController.swift in Sources */,
 				D00F770B2700C0160093E2E4 /* APIResponse.swift in Sources */,
 				D00F76F82700A8550093E2E4 /* CustomViewController.swift in Sources */,
 				D00F76FE2700B1FF0093E2E4 /* Constants.swift in Sources */,
+				D0706A572703740A00CB1C89 /* Coordinator.swift in Sources */,
 				D00F77022700B7730093E2E4 /* HTTPRequestMaker.swift in Sources */,
+				D0706A582703740A00CB1C89 /* MainCoordinator.swift in Sources */,
 				D00F76DF2700A4700093E2E4 /* AppDelegate.swift in Sources */,
 				D00F76E12700A4700093E2E4 /* SceneDelegate.swift in Sources */,
 			);
