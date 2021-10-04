@@ -23,6 +23,8 @@
 		D0706A572703740A00CB1C89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0706A552703740A00CB1C89 /* Coordinator.swift */; };
 		D0706A582703740A00CB1C89 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0706A562703740A00CB1C89 /* MainCoordinator.swift */; };
 		D0706A5A270374C500CB1C89 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0706A59270374C500CB1C89 /* AlertController.swift */; };
+		D07490DB270B404A00122A62 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07490DA270B404A00122A62 /* Analytics.swift */; };
+		D0DC916427071DE400D9F970 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0DC916327071DE400D9F970 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		D0706A552703740A00CB1C89 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		D0706A562703740A00CB1C89 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		D0706A59270374C500CB1C89 /* AlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		D07490DA270B404A00122A62 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		D0DC916327071DE400D9F970 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,7 @@
 				D00F76E02700A4700093E2E4 /* SceneDelegate.swift */,
 				D00F76E72700A4710093E2E4 /* Assets.xcassets */,
 				D00F76EC2700A4710093E2E4 /* Info.plist */,
+				D0DC916327071DE400D9F970 /* GoogleService-Info.plist */,
 			);
 			path = TodayInSpaceHistory;
 			sourceTree = "<group>";
@@ -136,6 +141,7 @@
 				D0706A562703740A00CB1C89 /* MainCoordinator.swift */,
 				D00F76FD2700B1FF0093E2E4 /* Constants.swift */,
 				D00F76FF2700B6320093E2E4 /* DateExtension.swift */,
+				D07490DA270B404A00122A62 /* Analytics.swift */,
 				D00F77012700B7730093E2E4 /* HTTPRequestMaker.swift */,
 			);
 			path = Tools;
@@ -211,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00F76E82700A4710093E2E4 /* Assets.xcassets in Resources */,
+				D0DC916427071DE400D9F970 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +278,7 @@
 				D00F76E32700A4700093E2E4 /* WelcomeViewController.swift in Sources */,
 				D00F770B2700C0160093E2E4 /* APIResponse.swift in Sources */,
 				D00F76F82700A8550093E2E4 /* CustomViewController.swift in Sources */,
+				D07490DB270B404A00122A62 /* Analytics.swift in Sources */,
 				D00F76FE2700B1FF0093E2E4 /* Constants.swift in Sources */,
 				D0706A572703740A00CB1C89 /* Coordinator.swift in Sources */,
 				D00F77022700B7730093E2E4 /* HTTPRequestMaker.swift in Sources */,
@@ -341,6 +349,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -395,6 +404,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

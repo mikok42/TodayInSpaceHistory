@@ -21,6 +21,7 @@ class MainViewViewModel {
     var keywords: [String]?
     var title: String?
     
+    let timer = AnalyticsTimer(reportName: "downloading")
     
     var imageLinks: [String]? {
         didSet {
@@ -33,7 +34,7 @@ class MainViewViewModel {
         }
     }
     
-    var httpsImageURLs: [String] = []{
+    var httpsImageURLs: [String] = [] {
         didSet {
             viewControllerDelegate?.populate()
         }
@@ -50,6 +51,7 @@ class MainViewViewModel {
     }
     
     func fetchData() {
+        timer.startTimer()
         dataSubscriber = dataGetter.makeRequestAndParse(endpoint: .search, arguments: getCurrentDate())?
             .sink(
                 receiveCompletion: { completion in
@@ -63,6 +65,8 @@ class MainViewViewModel {
                 receiveValue: { data in
                     self.data = data
         })
+        timer.endTimer()
+        timer.reportToAnalytics()
     }
     
     func fetchImages(url: String) {
@@ -78,20 +82,18 @@ class MainViewViewModel {
                 },
                 receiveValue: { images in
                     self.imageLinks = images
-                    
-                    
         })
     }
     
     private func setData(result: SearchResult) {
         self.center = currentItem?.data?.first?.center
-        self.date_created = currentItem?.data?.first?.date_created
+        self.date_created = currentItem?.data?.first?.dateCreated
         self.keywords = currentItem?.data?.first?.keywords
         self.title = currentItem?.data?.first?.title
         self.description = currentItem?.data?.first?.description
     }
     
-    private func getCurrentDate() -> [String]{
+    private func getCurrentDate() -> [String] {
         let date = Date()
         let calendar = Calendar.current
         let day = String(calendar.component(.day, from: date))

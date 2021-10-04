@@ -7,13 +7,16 @@
 
 import UIKit
 import Combine
+import Firebase
 
 protocol ViewControllerDelegate: AnyObject {
     func populate()
 }
 
 class WelcomeViewController: CustomViewController<WelcomeView>, ViewControllerDelegate, RefreshViewDelegate {
+    let analyticsOfficer = AnalyticsTimer(reportName: "view_loading")
     
+    var didSendLoadReport: Bool = false
     var viewModel: MainViewViewModel
     var coordinator: Coordinator?
     override init() {
@@ -21,6 +24,10 @@ class WelcomeViewController: CustomViewController<WelcomeView>, ViewControllerDe
         super.init()
         self.viewModel.viewControllerDelegate = self
         self.customView.refreshDelegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        analyticsOfficer.startTimer()
     }
     
     required init?(coder: NSCoder) {
@@ -39,13 +46,10 @@ class WelcomeViewController: CustomViewController<WelcomeView>, ViewControllerDe
         guard let description = viewModel.description else { return }
         guard let title = viewModel.title else { return }
         customView.populate(imageLink: url, description: description, title: title)
-        if #available(iOS 15.0, *) {
-            do {
-                let x = try Date(viewModel.date_created!, strategy: .iso8601)
-                print("Mikołaj: \(x)")
-            } catch {
-                print("Mikołaj: \(error)")
-            }
+        if !didSendLoadReport {
+            analyticsOfficer.endTimer()
+            analyticsOfficer.reportToAnalytics()
+            didSendLoadReport = true
         }
     }
     

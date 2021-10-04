@@ -8,5 +8,6 @@ target 'TodayInSpaceHistory' do
   # Pods for TodayInSpaceHistory
   pod 'SnapKit'
   pod 'Kingfisher'
+  pod 'Firebase/Analytics'
   pod 'Then' 
 end

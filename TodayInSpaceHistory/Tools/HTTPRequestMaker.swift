@@ -40,6 +40,8 @@ class HTTPRequestMaker: HTTPRequestMakerProtocol {
         guard let url = URL(string: baseURL + Endpoints.search.rawValue + "description=" + searchArguments + "&media_type=image") else { return nil }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return URLSession.shared.dataTaskPublisher(for: request)
             .map ({ $0.data })
             .decode(type: T.self, decoder: JSONDecoder())
@@ -57,5 +59,4 @@ class HTTPRequestMaker: HTTPRequestMakerProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
 }

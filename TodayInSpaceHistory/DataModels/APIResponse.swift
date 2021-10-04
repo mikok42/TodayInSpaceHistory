@@ -12,15 +12,15 @@ struct APIResponse: Codable {
 }
 
 struct Collection: Codable {
-    let metadata: Metadata?
+    //let metadata: Metadata?
     let links: [Links]?
-    let version: String?
+    //let version: String?
     let href: String?
     let items: [Item]?
 }
 
 struct Metadata: Codable {
-    let total_hits: Int
+    let totalHits: Int
 }
 
 struct Links: Codable {
@@ -43,10 +43,10 @@ struct ItemLinks: Codable {
 
 struct SearchResult: Codable {
     let center: String?
-    let date_created: String?
+    let dateCreated: String?
     let description: String?
     let keywords: [String]?
     let media_type: String?
-    let nasa_id: String?
+    let nasaId: String?
     let title: String?
 }
