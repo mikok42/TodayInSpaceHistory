@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B3E3395996DD181E3715588 /* Pods_TodayInSpaceHistory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5481C135ECA4A90DCA92B7 /* Pods_TodayInSpaceHistory.framework */; };
+		2B3C1A37889143D9890F318E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60128567D61441368CB0E394 /* SnapKit */; };
+		3C79E1B825FF4A6DBAACBB32 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3DCC92EFEF5840EBB23D5FF7 /* Kingfisher */; };
+		836E20E682E045EEB30990B4 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CA631FDC9A254A8BA0E494CB /* Then */; };
+		15A1931FFC9849DDA94B6265 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F146D35D0A8846A0B28E0A4B /* FirebaseAnalytics */; };
 		D00F76DF2700A4700093E2E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76DE2700A4700093E2E4 /* AppDelegate.swift */; };
 		D00F76E12700A4700093E2E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76E02700A4700093E2E4 /* SceneDelegate.swift */; };
 		D00F76E32700A4700093E2E4 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76E22700A4700093E2E4 /* WelcomeViewController.swift */; };
@@ -28,9 +31,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0C3E17BD098290C55EDC44FF /* Pods-TodayInSpaceHistory.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodayInSpaceHistory.release.xcconfig"; path = "Target Support Files/Pods-TodayInSpaceHistory/Pods-TodayInSpaceHistory.release.xcconfig"; sourceTree = "<group>"; };
-		20706E40DFB7E930CF5C4680 /* Pods-TodayInSpaceHistory.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodayInSpaceHistory.debug.xcconfig"; path = "Target Support Files/Pods-TodayInSpaceHistory/Pods-TodayInSpaceHistory.debug.xcconfig"; sourceTree = "<group>"; };
-		9D5481C135ECA4A90DCA92B7 /* Pods_TodayInSpaceHistory.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TodayInSpaceHistory.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00F76DB2700A4700093E2E4 /* TodayInSpaceHistory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodayInSpaceHistory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00F76DE2700A4700093E2E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D00F76E02700A4700093E2E4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,37 +57,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B3E3395996DD181E3715588 /* Pods_TodayInSpaceHistory.framework in Frameworks */,
+				2B3C1A37889143D9890F318E /* SnapKit in Frameworks */,
+				3C79E1B825FF4A6DBAACBB32 /* Kingfisher in Frameworks */,
+				836E20E682E045EEB30990B4 /* Then in Frameworks */,
+				15A1931FFC9849DDA94B6265 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		08A839D255B5DF18B569F212 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				9D5481C135ECA4A90DCA92B7 /* Pods_TodayInSpaceHistory.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A7624D650BCC106439CF511A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				20706E40DFB7E930CF5C4680 /* Pods-TodayInSpaceHistory.debug.xcconfig */,
-				0C3E17BD098290C55EDC44FF /* Pods-TodayInSpaceHistory.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		D00F76D22700A4700093E2E4 = {
 			isa = PBXGroup;
 			children = (
 				D00F76DD2700A4700093E2E4 /* TodayInSpaceHistory */,
 				D00F76DC2700A4700093E2E4 /* Products */,
-				A7624D650BCC106439CF511A /* Pods */,
-				08A839D255B5DF18B569F212 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -163,17 +147,21 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D00F76EF2700A4710093E2E4 /* Build configuration list for PBXNativeTarget "TodayInSpaceHistory" */;
 			buildPhases = (
-				93775FB74166CEFA08C87022 /* [CP] Check Pods Manifest.lock */,
 				D00F76D72700A4700093E2E4 /* Sources */,
 				D00F76D82700A4700093E2E4 /* Frameworks */,
 				D00F76D92700A4700093E2E4 /* Resources */,
-				7F32E8F82A4BBB8A57D411F5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = TodayInSpaceHistory;
+			packageProductDependencies = (
+				60128567D61441368CB0E394 /* SnapKit */,
+				3DCC92EFEF5840EBB23D5FF7 /* Kingfisher */,
+				CA631FDC9A254A8BA0E494CB /* Then */,
+				F146D35D0A8846A0B28E0A4B /* FirebaseAnalytics */,
+			);
 			productName = TodayInSpaceHistory;
 			productReference = D00F76DB2700A4700093E2E4 /* TodayInSpaceHistory.app */;
 			productType = "com.apple.product-type.application";
@@ -202,6 +190,12 @@
 				Base,
 			);
 			mainGroup = D00F76D22700A4700093E2E4;
+			packageReferences = (
+				7238DA6952234371B9C4CD89 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D20E5FC0B6224F219F50F9F8 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				8076CE170A8349C082EFCEE6 /* XCRemoteSwiftPackageReference "Then" */,
+				A93A0623D04B4D4EB8D6C426 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = D00F76DC2700A4700093E2E4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -222,48 +216,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7F32E8F82A4BBB8A57D411F5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TodayInSpaceHistory/Pods-TodayInSpaceHistory-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TodayInSpaceHistory/Pods-TodayInSpaceHistory-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TodayInSpaceHistory/Pods-TodayInSpaceHistory-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		93775FB74166CEFA08C87022 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TodayInSpaceHistory-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D00F76D72700A4700093E2E4 /* Sources */ = {
@@ -411,7 +363,6 @@
 		};
 		D00F76F02700A4710093E2E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20706E40DFB7E930CF5C4680 /* Pods-TodayInSpaceHistory.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -441,7 +392,6 @@
 		};
 		D00F76F12700A4710093E2E4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C3E17BD098290C55EDC44FF /* Pods-TodayInSpaceHistory.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -491,6 +441,64 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7238DA6952234371B9C4CD89 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		D20E5FC0B6224F219F50F9F8 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		8076CE170A8349C082EFCEE6 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		A93A0623D04B4D4EB8D6C426 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		60128567D61441368CB0E394 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7238DA6952234371B9C4CD89 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		3DCC92EFEF5840EBB23D5FF7 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D20E5FC0B6224F219F50F9F8 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		CA631FDC9A254A8BA0E494CB /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8076CE170A8349C082EFCEE6 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		F146D35D0A8846A0B28E0A4B /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A93A0623D04B4D4EB8D6C426 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D00F76D32700A4700093E2E4 /* Project object */;
 }

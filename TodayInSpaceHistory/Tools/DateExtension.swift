@@ -13,4 +13,12 @@ extension Date {
         dateFormatter.dateFormat = "MMMM"
         return dateFormatter.string(from: self)
     }
+    
+    static var todayDayMonthComponents: [String] {
+        let date = Date()
+        let calendar = Calendar.current
+        let day = String(calendar.component(.day, from: date))
+        let month = date.month
+        return [day, month]
+    }
 }

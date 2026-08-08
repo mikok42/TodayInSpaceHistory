@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class MainViewViewModel {
-    let dataGetter = HTTPRequestMaker()
+    let dataGetter: HTTPRequestMakerProtocol
     var dataSubscriber: AnyCancellable?
     var imageLinksSubscriber: AnyCancellable?
     var currentItem: Item?
@@ -22,6 +22,10 @@ class MainViewViewModel {
     var title: String?
     
     let timer = AnalyticsTimer(reportName: "downloading")
+    
+    init(dataGetter: HTTPRequestMakerProtocol = HTTPRequestMaker()) {
+        self.dataGetter = dataGetter
+    }
     
     var imageLinks: [String]? {
         didSet {
@@ -42,7 +46,9 @@ class MainViewViewModel {
     
     var data: APIResponse? {
         didSet {
-            self.currentItem = data?.collection.items?.randomElement()
+            let items = data?.collection.items ?? []
+            let todaysItems = items.filter(\.matchesTodaysAnniversary)
+            self.currentItem = (todaysItems.isEmpty ? items : todaysItems).randomElement()
             guard let url = currentItem?.href else { return }
             fetchImages(url: url)
             guard let result = currentItem?.data?.first else { return }
@@ -52,7 +58,7 @@ class MainViewViewModel {
     
     func fetchData() {
         timer.startTimer()
-        dataSubscriber = dataGetter.makeRequestAndParse(endpoint: .search, arguments: getCurrentDate())?
+        dataSubscriber = dataGetter.makeRequest(endpoint: .search)
             .sink(
                 receiveCompletion: { completion in
                     switch completion {
@@ -70,7 +76,7 @@ class MainViewViewModel {
     }
     
     func fetchImages(url: String) {
-        imageLinksSubscriber = dataGetter.makeRequest(url: url)?
+        imageLinksSubscriber = dataGetter.fetchImages(url: url)
             .sink(
                 receiveCompletion: { completion in
                     switch completion {
@@ -93,11 +99,5 @@ class MainViewViewModel {
         self.description = currentItem?.data?.first?.description
     }
     
-    private func getCurrentDate() -> [String] {
-        let date = Date()
-        let calendar = Calendar.current
-        let day = String(calendar.component(.day, from: date))
-        let month = date.month
-        return [day, month]
-    }
+    
 }

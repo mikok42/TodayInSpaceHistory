@@ -8,54 +8,90 @@
 import Foundation
 import Combine
 
+struct APIConstants {
+    static let baseURL: String = "https://images-api.nasa.gov"
+    static let key: String = "LZbLlqQvVsMEUol6sIwGCIJbGEYzDerhRIFZN212"
+}
+
 enum Endpoints: String {
-    case search = "/search?"
+    case search = "/search"
     case asset = "/asset/"
     case captions = "/captions/"
     case album = "/album/"
+    
+    var queryParams: [URLQueryItem] {
+        switch self {
+        case .search:
+            return [
+                URLQueryItem(
+                    name: "description",
+                    value: Date.todayDayMonthComponents.joined(separator: " ")
+                ),
+                URLQueryItem(name: "media_type", value: "image")
+            ]
+        case .asset, .captions, .album:
+            return []
+        }
+    }
+    
+    var url: URL? {
+        switch self {
+        case .search:
+            var components = URLComponents(string: APIConstants.baseURL + rawValue)
+            components?.queryItems = queryParams
+            return components?.url
+        case .asset, .captions, .album:
+            return nil
+        }
+    }
+    
+    var method: HTTPMethods {
+        switch self {
+        case .search: return .get
+        case .asset: return .get
+        case .captions: return .get
+        case .album: return .get
+        }
+    }
+}
+
+enum HTTPMethods: String {
+    case get = "GET"
+    case post = "POST"
+    case put = "PUT"
+    case delete = "DELETE"
+    
+
 }
 
 protocol HTTPRequestMakerProtocol: AnyObject {
-    var baseURL: String { get }
-    
-    func makeRequestAndParse<T: Decodable>(endpoint: Endpoints, arguments: [String]) -> AnyPublisher<T, Error>?
-    func makeSearchRequest<T: Decodable>(arguments: [String]) -> AnyPublisher<[T], Error>?
+    func makeRequest<T>(endpoint: Endpoints) -> AnyPublisher<T, Error> where T : Decodable
+    func fetchImages<T>(url: String) -> AnyPublisher<T, Error> where T : Decodable
 }
 
 class HTTPRequestMaker: HTTPRequestMakerProtocol {
-    var baseURL: String = "https://images-api.nasa.gov"
-    var APIkey: String = "LZbLlqQvVsMEUol6sIwGCIJbGEYzDerhRIFZN212"
-    func makeRequestAndParse<T>(endpoint: Endpoints, arguments: [String]) -> AnyPublisher<T, Error>? where T : Decodable {
-        switch endpoint {
-        case .search:
-            return makeSearchRequest(arguments: arguments)
-        default:
-            print("Mikołaj: unknown")
+    func fetchImages<T>(url: String) -> AnyPublisher<T, Error> where T : Decodable {
+        guard let url = URL(string: url) else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
-        return nil
+        return perform(request: URLRequest(url: url), decoder: JSONDecoder())
     }
     
-    func makeSearchRequest<T>(arguments: [String]) -> AnyPublisher<T, Error>? where T : Decodable {
-        let searchArguments = arguments.joined(separator: "%20")
-        guard let url = URL(string: baseURL + Endpoints.search.rawValue + "description=" + searchArguments + "&media_type=image") else { return nil }
+    func makeRequest<T>(endpoint: Endpoints) -> AnyPublisher<T, Error> where T: Decodable {
+        guard let url = endpoint.url else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = endpoint.method.rawValue
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .map ({ $0.data })
-            .decode(type: T.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        return perform(request: request, decoder: decoder)
     }
     
-    func makeRequest<T>(url: String) -> AnyPublisher<T, Error>? where T: Decodable {
-        guard let url = URL(string: url) else { return nil }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .map ({ $0.data })
-            .decode(type: T.self, decoder: JSONDecoder())
+    private func perform<T: Decodable>(request: URLRequest, decoder: JSONDecoder) -> AnyPublisher<T, Error> {
+        URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: T.self, decoder: decoder)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
