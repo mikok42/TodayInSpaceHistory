@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Android: Run on emulator",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "bash scripts/android-emulator.sh run --build",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

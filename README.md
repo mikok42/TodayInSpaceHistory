@@ -5,7 +5,14 @@ Cross-platform monorepo:
 | Path | Platform |
 |------|----------|
 | [`ios/`](ios/) | SwiftUI / Xcode — open `ios/TodayInSpaceHistory.xcodeproj` |
-| [`android/`](android/) | Kotlin / Jetpack Compose — open `android/` in Android Studio |
+| [`android/`](android/) | Kotlin / Jetpack Compose — open `android/` in Android Studio (run config **app**, AVD `Pixel_7_API_35`) |
+
+From Cursor: **Run and Debug → Android: Run on emulator**, or:
+
+```bash
+bash scripts/android-emulator.sh run --build
+```
+
 
 Agent rules: [`.cursor/rules/`](.cursor/rules/) (see [`AGENTS.md`](AGENTS.md)).
 
