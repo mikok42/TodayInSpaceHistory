@@ -1,4 +1,4 @@
-# Xcode
+# Xcode / iOS
 build/
 DerivedData/
 *.pbxuser
@@ -16,10 +16,24 @@ xcuserdata/
 *.xcscmblueprint
 
 # Swift Package Manager
-# Xcode resolves SPM packages into TodayInSpaceHistory.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
-# Package.resolved lives there and IS committed (like Podfile.lock was) to pin dependency versions.
+# Package.resolved under ios/.../xcshareddata/swiftpm/ is committed.
 .build/
 .swiftpm/
 
+# Android
+android/.gradle/
+android/**/build/
+android/local.properties
+android/*.iml
+android/.idea/
+*.apk
+*.aab
+
+# Node (parity script)
+node_modules/
+package-lock.json
+parity-plan.md
+
 # macOS
 .DS_Store
+.idea/

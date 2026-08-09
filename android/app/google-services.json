@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "453196059",
+    "project_id": "todayinspacehistory-cbff2",
+    "storage_bucket": "todayinspacehistory-cbff2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453196059:android:b7e1e9e27b6bf9cceefbbe",
+        "android_client_info": {
+          "package_name": "miko.todayinspacehistory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgvC3Tf8Lfh3daLFw5xOjiQ_v1f2MUTeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,23 @@
+---
+description: Dual-platform parity — changes on one side require the other
+alwaysApply: true
+---
+
+# Cross-platform parity (ios + android)
+
+This monorepo ships the same product on **iOS** (`ios/`) and **Android** (`android/`).
+
+## Rule
+A behavior, API, analytics, or user-visible UI change in one platform **requires the matching change in the other**, or an explicit PR note explaining why parity is deferred.
+
+## Shared seams (keep names aligned)
+NetworkClient → ImageProvider → ViewModel → UI + Coordinator + AnalyticsTimer + Errors
+
+## Product contracts that must stay aligned
+- NASA search: `description={day} {MonthName}` + `media_type=image` (English month names for the query)
+- Client-side anniversary filter on `date_created` (month/day)
+- Random pick from filtered set (fallback to all)
+- Image URL: first containing `large` | `medium` | `original`
+- `http` → `https` rewrite on asset URLs
+- HTML entity decoding on title/description
+- Firebase Analytics event `downloading` with param `duration_ms`

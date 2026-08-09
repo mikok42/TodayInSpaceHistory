@@ -1,0 +1,11 @@
+{
+  "name": "today-in-space-history-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "parity": "node scripts/plan-platform-parity.mjs"
+  },
+  "devDependencies": {
+    "@cursor/sdk": "^1.0.27"
+  }
+}
