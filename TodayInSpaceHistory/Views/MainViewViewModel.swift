@@ -47,7 +47,7 @@ final class MainViewViewModel {
             $0.contains("large") || $0.contains("medium") || $0.contains("original")
         }
         let result = item.data?.first
-        title = result?.title
-        description = result?.description
+        title = result?.title?.decodedHTMLEntities
+        description = result?.description?.decodedHTMLEntities
     }
 }

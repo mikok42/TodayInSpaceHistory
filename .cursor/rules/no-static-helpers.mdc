@@ -1,0 +1,21 @@
+---
+description: Prefer instance/extension APIs over static helper functions
+alwaysApply: true
+---
+
+# No static helper functions
+
+Static helper functions are considered poor style in this project ("wiocha").
+
+## Prefer instead
+- `extension` on the relevant type (e.g. `String.decodingHTMLEntities`)
+- Instance methods when behavior belongs to an object
+- Injected dependencies / protocols when behavior may need swapping or mocking
+
+## Avoid
+- `private static func` utility helpers on view models / services
+- `Self.someHelper(...)` call sites for pure transforms that belong on the value type
+
+## Allowed exceptions
+- True type factories (`static func make...` returning `Self`) when that is the clearest API
+- Framework-required entry points
