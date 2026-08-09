@@ -7,19 +7,14 @@
 
 import Foundation
 
-enum ImageProviderError: Error {
-    case noItems
-    case missingAssetURL
-}
-
 protocol ImageProviderServiceProtocol {
     func loadTodaysImage() async throws -> (item: Item, imageURLs: [String])
 }
 
 final class ImageProviderService: ImageProviderServiceProtocol {
-    private let client: HTTPRequestMakerProtocol
+    private let client: NetworkClientProtocol
     
-    init(client: HTTPRequestMakerProtocol = HTTPRequestMaker()) {
+    init(client: NetworkClientProtocol = NetworkClient()) {
         self.client = client
     }
     
@@ -28,10 +23,10 @@ final class ImageProviderService: ImageProviderServiceProtocol {
         let items = response.collection.items ?? []
         let todaysItems = items.filter(\.matchesTodaysAnniversary)
         guard let item = (todaysItems.isEmpty ? items : todaysItems).randomElement() else {
-            throw ImageProviderError.noItems
+            throw Errors.ImageProvider.noItems
         }
         guard let href = item.href else {
-            throw ImageProviderError.missingAssetURL
+            throw Errors.ImageProvider.missingAssetURL
         }
         let rawURLs: [String] = try await client.fetchImages(url: href)
         let imageURLs = rawURLs.map {
