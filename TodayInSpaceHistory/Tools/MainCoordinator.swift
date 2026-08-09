@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class MainCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
@@ -16,8 +17,7 @@ class MainCoordinator: Coordinator {
     }
     
     func start() {
-        let viewController = WelcomeViewController()
-        viewController.coordinator = self
-        navigationController.pushViewController(viewController, animated: false)
+        let hostingController = UIHostingController(rootView: MainView())
+        navigationController.pushViewController(hostingController, animated: false)
     }
 }
