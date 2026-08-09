@@ -1,18 +1,18 @@
 # Today In Space History
 
-Cross-platform monorepo:
+Monorepo setup for a sample app for both iOS and Android, setup to support agentic workflows.
 
 | Path | Platform |
 |------|----------|
 | [`ios/`](ios/) | SwiftUI / Xcode — open `ios/TodayInSpaceHistory.xcodeproj` |
-| [`android/`](android/) | Kotlin / Jetpack Compose — open `android/` in Android Studio (run config **app**, AVD `Pixel_7_API_35`) |
+| [`android/`](android/) | Kotlin / Jetpack Compose — open **`android/`** in Android Studio (not the repo root) |
 
-From Cursor: **Run and Debug → Android: Run on emulator**, or:
+### Run Android (Android Studio)
 
-```bash
-bash scripts/android-emulator.sh run --build
-```
-
+1. **File → Open…** → select the `android/` folder (so Gradle syncs the app module).
+2. Wait for Gradle sync to finish (JDK: embedded **jbr-21**).
+3. In the toolbar, choose run configuration **app** and device **Pixel_7_API_35** (AVD uses host GPU).
+4. Press **Run** (green triangle) — Studio builds, starts the emulator if needed, installs, and launches.
 
 Agent rules: [`.cursor/rules/`](.cursor/rules/) (see [`AGENTS.md`](AGENTS.md)).
 

@@ -10,6 +10,8 @@ This monorepo ships the same product on **iOS** (`ios/`) and **Android** (`andro
 ## Rule
 A behavior, API, analytics, or user-visible UI change in one platform **requires the matching change in the other**, or an explicit PR note explaining why parity is deferred.
 
+Timing of the Android update is governed by `ios-first.mdc` (iOS first; port after iOS commit or explicit ask).
+
 ## Shared seams (keep names aligned)
 NetworkClient → ImageProvider → ViewModel → UI + Coordinator + AnalyticsTimer + Errors
 

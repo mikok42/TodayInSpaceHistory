@@ -1,0 +1,19 @@
+---
+description: Implement on iOS first; port to Android only after iOS is committed (or explicit ask)
+alwaysApply: true
+---
+
+# iOS-first workflow
+
+Unless the user specifies otherwise, make product changes in **`ios/` only**.
+
+## When to touch Android
+- **Do not** port or sync to `android/` until the user has **committed** the iOS work, or explicitly asks to port/sync now.
+- After that signal (commit or explicit ask), bring Android to parity per `cross-platform-parity.mdc`.
+
+## Exceptions
+- User asks for **Android-only** → work in `android/` only.
+- User asks for **both platforms** (or to sync now) → implement or port immediately.
+
+## Relation to parity
+Parity remains required eventually. This rule only governs **when** Android is updated, not whether.
