@@ -6,11 +6,9 @@
 //
 
 import Foundation
-import Combine
 
 struct APIConstants {
     static let baseURL: String = "https://images-api.nasa.gov"
-    static let key: String = "LZbLlqQvVsMEUol6sIwGCIJbGEYzDerhRIFZN212"
 }
 
 enum Endpoints: String {
@@ -60,39 +58,34 @@ enum HTTPMethods: String {
     case post = "POST"
     case put = "PUT"
     case delete = "DELETE"
-    
-
 }
 
 protocol HTTPRequestMakerProtocol: AnyObject {
-    func makeRequest<T>(endpoint: Endpoints) -> AnyPublisher<T, Error> where T : Decodable
-    func fetchImages<T>(url: String) -> AnyPublisher<T, Error> where T : Decodable
+    func makeRequest<T: Decodable>(endpoint: Endpoints) async throws -> T
+    func fetchImages<T: Decodable>(url: String) async throws -> T
 }
 
 class HTTPRequestMaker: HTTPRequestMakerProtocol {
-    func fetchImages<T>(url: String) -> AnyPublisher<T, Error> where T : Decodable {
+    func fetchImages<T: Decodable>(url: String) async throws -> T {
         guard let url = URL(string: url) else {
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+            throw URLError(.badURL)
         }
-        return perform(request: URLRequest(url: url), decoder: JSONDecoder())
+        return try await perform(request: URLRequest(url: url), decoder: JSONDecoder())
     }
     
-    func makeRequest<T>(endpoint: Endpoints) -> AnyPublisher<T, Error> where T: Decodable {
+    func makeRequest<T: Decodable>(endpoint: Endpoints) async throws -> T {
         guard let url = endpoint.url else {
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+            throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return perform(request: request, decoder: decoder)
+        return try await perform(request: request, decoder: decoder)
     }
     
-    private func perform<T: Decodable>(request: URLRequest, decoder: JSONDecoder) -> AnyPublisher<T, Error> {
-        URLSession.shared.dataTaskPublisher(for: request)
-            .map(\.data)
-            .decode(type: T.self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+    private func perform<T: Decodable>(request: URLRequest, decoder: JSONDecoder) async throws -> T {
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try decoder.decode(T.self, from: data)
     }
 }

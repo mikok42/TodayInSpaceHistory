@@ -1,6 +1,6 @@
 //
 //  MainCoordinator.swift
-//  diveCompanionSnapKit
+//  TodayInSpaceHistory
 //
 //  Created by Mikołaj Linczewski on 11/05/2021.
 //
@@ -15,10 +15,9 @@ class MainCoordinator: Coordinator {
         self.navigationController = navigationController
     }
     
-    func goToMainView() {
+    func start() {
         let viewController = WelcomeViewController()
         viewController.coordinator = self
-        navigationController.pushViewController(viewController, animated: true)
+        navigationController.pushViewController(viewController, animated: false)
     }
-    
 }
