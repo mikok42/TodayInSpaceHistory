@@ -9,6 +9,7 @@ import Foundation
 
 protocol DescriptiveError: Error, CustomStringConvertible {
     var description: String { get }
+    var title: String { get }
 }
 
 struct Errors {}
@@ -17,6 +18,7 @@ extension Errors {
     enum NetworkClient: DescriptiveError {
         case invalidURL(endpointOrPath: String)
         case requestFailed(underlying: Error)
+        case unacceptableStatusCode(Int)
         case decodingFailed(underlying: Error)
         
         var description: String {
@@ -25,10 +27,17 @@ extension Errors {
                 return "[NetworkClient] Failed to build URL from: \(endpointOrPath)"
             case .requestFailed(let underlying):
                 return "[NetworkClient] Network request failed: \(underlying.localizedDescription)"
+            case .unacceptableStatusCode(let statusCode):
+                return "[NetworkClient] Server responded with status code \(statusCode)"
             case .decodingFailed(let underlying):
                 return "[NetworkClient] Failed to decode response: \(underlying.localizedDescription)"
             }
         }
+        
+        var title: String {
+            "something went no yes"
+        }
+        
     }
 }
 
@@ -44,6 +53,10 @@ extension Errors {
             case .missingAssetURL:
                 return "[ImageProvider] Selected item is missing an asset list URL (href)."
             }
+        }
+        
+        var title: String {
+            "something went no yes"
         }
     }
 }

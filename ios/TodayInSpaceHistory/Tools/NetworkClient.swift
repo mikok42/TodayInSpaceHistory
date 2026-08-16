@@ -13,6 +13,12 @@ protocol NetworkClientProtocol: AnyObject {
 }
 
 class NetworkClient: NetworkClientProtocol {
+    private let session: URLSession
+    
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
+    
     func fetchImages<T: Decodable>(url: String) async throws -> T {
         guard let url = URL(string: url) else {
             throw Errors.NetworkClient.invalidURL(endpointOrPath: url)
@@ -33,10 +39,15 @@ class NetworkClient: NetworkClientProtocol {
     
     private func perform<T: Decodable>(request: URLRequest, decoder: JSONDecoder) async throws -> T {
         let data: Data
+        let response: URLResponse
         do {
-            (data, _) = try await URLSession.shared.data(for: request)
+            (data, response) = try await session.data(for: request)
         } catch {
             throw Errors.NetworkClient.requestFailed(underlying: error)
+        }
+        if let httpResponse = response as? HTTPURLResponse,
+           !(200..<300).contains(httpResponse.statusCode) {
+            throw Errors.NetworkClient.unacceptableStatusCode(httpResponse.statusCode)
         }
         do {
             return try decoder.decode(T.self, from: data)

@@ -21,6 +21,8 @@
 		A11C00000000000000000017 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C0000000000000000001F /* DateExtensionTests.swift */; };
 		A11C00000000000000000018 /* ItemAnniversaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000020 /* ItemAnniversaryTests.swift */; };
 		A11C00000000000000000019 /* ImageProviderServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000021 /* ImageProviderServiceTests.swift */; };
+		A11C00000000000000000062 /* StubURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000060 /* StubURLProtocol.swift */; };
+		A11C00000000000000000063 /* NetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000061 /* NetworkClientTests.swift */; };
 		A11C0000000000000000001A /* MainViewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000022 /* MainViewViewModelTests.swift */; };
 		A11C0000000000000000002E /* MainScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C0000000000000000002F /* MainScreenUITests.swift */; };
 		A5EB25CBE05444418200B5B3 /* ImageProviderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2040D1ECAF43BE955655F1 /* ImageProviderService.swift */; };
@@ -76,6 +78,8 @@
 		A11C0000000000000000001F /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		A11C00000000000000000020 /* ItemAnniversaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemAnniversaryTests.swift; sourceTree = "<group>"; };
 		A11C00000000000000000021 /* ImageProviderServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProviderServiceTests.swift; sourceTree = "<group>"; };
+		A11C00000000000000000060 /* StubURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubURLProtocol.swift; sourceTree = "<group>"; };
+		A11C00000000000000000061 /* NetworkClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientTests.swift; sourceTree = "<group>"; };
 		A11C00000000000000000022 /* MainViewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModelTests.swift; sourceTree = "<group>"; };
 		A11C00000000000000000023 /* TodayInSpaceHistoryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodayInSpaceHistoryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11C0000000000000000002F /* MainScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenUITests.swift; sourceTree = "<group>"; };
@@ -159,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				A11C00000000000000000021 /* ImageProviderServiceTests.swift */,
+				A11C00000000000000000061 /* NetworkClientTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -169,6 +174,7 @@
 				A11C0000000000000000001B /* MockNetworkClient.swift */,
 				A11C0000000000000000001C /* MockImageProvider.swift */,
 				A11C0000000000000000001D /* TestFixtures.swift */,
+				A11C00000000000000000060 /* StubURLProtocol.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -419,6 +425,8 @@
 				A11C00000000000000000018 /* ItemAnniversaryTests.swift in Sources */,
 				A11C00000000000000000019 /* ImageProviderServiceTests.swift in Sources */,
 				A11C0000000000000000001A /* MainViewViewModelTests.swift in Sources */,
+				A11C00000000000000000062 /* StubURLProtocol.swift in Sources */,
+				A11C00000000000000000063 /* NetworkClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
