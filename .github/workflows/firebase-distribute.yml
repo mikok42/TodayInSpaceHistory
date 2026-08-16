@@ -8,6 +8,7 @@ on:
 env:
   FIREBASE_ANDROID_APP_ID_DEFAULT: "1:453196059:android:b7e1e9e27b6bf9cceefbbe"
   FIREBASE_IOS_APP_ID_DEFAULT: "1:453196059:ios:3ae822f995de3787eefbbe"
+  FIREBASE_PROJECT: todayinspacehistory-cbff2
   FIREBASE_TESTER_GROUP: qa
 
 jobs:
@@ -75,25 +76,37 @@ jobs:
         working-directory: ios
         run: |
           set -euo pipefail
-          DEVICE_NAME=$(xcrun simctl list devices available -j | python3 -c '
-          import json, sys
-          data = json.load(sys.stdin)
-          names = []
-          for devices in data.get("devices", {}).values():
-              for device in devices:
-                  if device.get("isAvailable") and "iPhone" in device.get("name", ""):
-                      names.append(device["name"])
-          print(names[-1] if names else "")
+          DEST_ID=$(xcodebuild \
+            -project TodayInSpaceHistory.xcodeproj \
+            -scheme TodayInSpaceHistory \
+            -showdestinations 2>/dev/null | python3 -c '
+          import re, sys
+          text = sys.stdin.read()
+          ids = []
+          for block in re.findall(r"\{[^{}]+\}", text):
+              if "placeholder" in block.lower():
+                  continue
+              if "iOS Simulator" not in block:
+                  continue
+              if "iPhone" not in block:
+                  continue
+              match = re.search(r"\bid:([^,}]+)", block)
+              if match:
+                  ids.append(match.group(1).strip())
+          print(ids[-1] if ids else "")
           ')
-          if [ -z "$DEVICE_NAME" ]; then
-            echo "::error::No available iPhone simulator"
+          if [ -z "$DEST_ID" ]; then
+            echo "::error::No iPhone simulator destination from xcodebuild -showdestinations"
+            xcodebuild -project TodayInSpaceHistory.xcodeproj -scheme TodayInSpaceHistory -showdestinations || true
+            xcrun simctl list devices available || true
             exit 1
           fi
-          echo "Using simulator: $DEVICE_NAME"
+          echo "Using simulator id=$DEST_ID"
+          xcrun simctl boot "$DEST_ID" || true
           xcodebuild test \
             -project TodayInSpaceHistory.xcodeproj \
             -scheme TodayInSpaceHistory \
-            -destination "platform=iOS Simulator,name=$DEVICE_NAME" \
+            -destination "id=$DEST_ID" \
             -resultBundlePath "$RUNNER_TEMP/TodayInSpaceHistory.xcresult"
 
       - name: Upload xcresult
@@ -162,11 +175,23 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
         run: |
-          printf '%s\n' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-sa.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          raw = os.environ["FIREBASE_SERVICE_ACCOUNT"].strip()
+          try:
+              data = json.loads(raw)
+          except json.JSONDecodeError as error:
+              raise SystemExit(f"FIREBASE_SERVICE_ACCOUNT is not valid JSON: {error}") from error
+          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "firebase-sa.json"
+          path.write_text(json.dumps(data))
+          print(f"Wrote service account for project {data.get('project_id')}")
+          PY
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
           app_id="${FIREBASE_ANDROID_APP_ID:-$FIREBASE_ANDROID_APP_ID_DEFAULT}"
+          app_id="${app_id//[$'\t\r\n ']}"
           firebase appdistribution:distribute \
             app/build/outputs/apk/release/app-release.apk \
+            --project "$FIREBASE_PROJECT" \
             --app "$app_id" \
             --groups "$FIREBASE_TESTER_GROUP" \
             --release-notes "CI build ${{ github.sha }}"
@@ -360,9 +385,20 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
         run: |
-          printf '%s\n' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-sa.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          raw = os.environ["FIREBASE_SERVICE_ACCOUNT"].strip()
+          try:
+              data = json.loads(raw)
+          except json.JSONDecodeError as error:
+              raise SystemExit(f"FIREBASE_SERVICE_ACCOUNT is not valid JSON: {error}") from error
+          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "firebase-sa.json"
+          path.write_text(json.dumps(data))
+          print(f"Wrote service account for project {data.get('project_id')}")
+          PY
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
           app_id="${FIREBASE_IOS_APP_ID:-$FIREBASE_IOS_APP_ID_DEFAULT}"
+          app_id="${app_id//[$'\t\r\n ']}"
           IPA=$(ls ios/build/*.ipa | head -n 1)
           notes="CI build ${{ github.sha }}"
           if [ "${IOS_SIGNING}" = "unsigned" ]; then
@@ -370,6 +406,7 @@ jobs:
           fi
           firebase appdistribution:distribute \
             "$IPA" \
+            --project "$FIREBASE_PROJECT" \
             --app "$app_id" \
             --groups "$FIREBASE_TESTER_GROUP" \
             --release-notes "$notes"
