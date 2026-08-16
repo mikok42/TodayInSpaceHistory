@@ -1,5 +1,5 @@
 package miko.todayinspacehistory.util
 
-object Constants {
+object StyleConstants {
     const val LABELS_MARGINS = 10
 }

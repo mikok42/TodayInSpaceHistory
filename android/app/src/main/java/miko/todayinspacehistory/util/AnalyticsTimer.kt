@@ -1,14 +1,17 @@
 package miko.todayinspacehistory.util
 
 import android.os.SystemClock
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 
 class AnalyticsTimer(
     private val reportName: String,
-    private val analytics: FirebaseAnalytics = Firebase.analytics,
+    private val onReport: (name: String, durationMs: Long) -> Unit = { name, durationMs ->
+        Firebase.analytics.logEvent(name) {
+            param("duration_ms", durationMs)
+        }
+    },
 ) {
     private var startTimeMs: Long = 0
     private var endTimeMs: Long = 0
@@ -24,8 +27,6 @@ class AnalyticsTimer(
     }
 
     fun reportToAnalytics() {
-        analytics.logEvent(reportName) {
-            param("duration_ms", durationMs)
-        }
+        onReport(reportName, durationMs)
     }
 }

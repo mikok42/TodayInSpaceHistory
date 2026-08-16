@@ -3,6 +3,7 @@ package miko.todayinspacehistory.data
 import miko.todayinspacehistory.data.model.Item
 import miko.todayinspacehistory.data.network.NetworkClient
 import miko.todayinspacehistory.data.network.NetworkClientImpl
+import miko.todayinspacehistory.util.rewritingHTTPSchemeToHTTPS
 
 data class TodaysImage(
     val item: Item,
@@ -27,7 +28,7 @@ class ImageProviderServiceImpl(
         val href = item.href
             ?: throw Errors.ImageProvider.MissingAssetURL
         val rawUrls = client.fetchImageUrls(href)
-        val imageUrls = rawUrls.map { it.replace("http", "https") }
+        val imageUrls = rawUrls.map { it.rewritingHTTPSchemeToHTTPS }
         return TodaysImage(item = item, imageUrls = imageUrls)
     }
 }

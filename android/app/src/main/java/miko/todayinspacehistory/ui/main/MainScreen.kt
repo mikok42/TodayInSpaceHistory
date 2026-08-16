@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,11 +32,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import miko.todayinspacehistory.util.Constants
+import miko.todayinspacehistory.util.AccessibilityIdentifiers
+import miko.todayinspacehistory.util.StyleConstants
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel(),
+    viewModel: MainViewModel = viewModel(factory = MainViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -47,24 +49,25 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(Constants.LABELS_MARGINS.dp),
+            .padding(StyleConstants.LABELS_MARGINS.dp),
     ) {
         Header(onRefresh = viewModel::fetchData)
-        Spacer(modifier = Modifier.height(Constants.LABELS_MARGINS.dp))
+        Spacer(modifier = Modifier.height(StyleConstants.LABELS_MARGINS.dp))
         Text(
             text = state.dayLabel,
             color = Color.White,
             fontSize = 30.sp,
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Light,
+            modifier = Modifier.testTag(AccessibilityIdentifiers.DAY_LABEL),
         )
-        Spacer(modifier = Modifier.height(Constants.LABELS_MARGINS.dp))
+        Spacer(modifier = Modifier.height(StyleConstants.LABELS_MARGINS.dp))
         ImageSection(
             imageUrl = state.imageUrl,
             title = state.title,
             isLoading = state.isLoading,
         )
-        Spacer(modifier = Modifier.height(Constants.LABELS_MARGINS.dp))
+        Spacer(modifier = Modifier.height(StyleConstants.LABELS_MARGINS.dp))
         Text(
             text = state.description.orEmpty(),
             color = Color.White,
@@ -73,7 +76,8 @@ fun MainScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .testTag(AccessibilityIdentifiers.DESCRIPTION),
         )
     }
 }
@@ -92,9 +96,14 @@ private fun Header(onRefresh: () -> Unit) {
             fontWeight = FontWeight.Light,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .testTag(AccessibilityIdentifiers.TITLE),
         )
-        TextButton(onClick = onRefresh) {
+        TextButton(
+            onClick = onRefresh,
+            modifier = Modifier.testTag(AccessibilityIdentifiers.REFRESH),
+        ) {
             Text(
                 text = "↺",
                 color = Color.White,
@@ -138,11 +147,15 @@ private fun ImageSection(
                             .padding(start = 0.dp, end = 20.dp, bottom = 20.dp)
                             .fillMaxWidth()
                             .background(Color.White.copy(alpha = 0.5f))
-                            .padding(8.dp),
+                            .padding(8.dp)
+                            .testTag(AccessibilityIdentifiers.IMAGE_TITLE),
                     )
                 }
             }
-            isLoading -> CircularProgressIndicator(color = Color.White)
+            isLoading -> CircularProgressIndicator(
+                color = Color.White,
+                modifier = Modifier.testTag(AccessibilityIdentifiers.LOADING),
+            )
         }
     }
 }
