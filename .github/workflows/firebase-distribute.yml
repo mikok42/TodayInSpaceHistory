@@ -11,7 +11,101 @@ env:
   FIREBASE_TESTER_GROUP: qa
 
 jobs:
+  test-android:
+    name: Test Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests
+        run: ./gradlew :app:testDebugUnitTest
+
+      - name: Upload unit test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-unit-test-results
+          path: android/app/build/reports/tests/testDebugUnitTest/
+          if-no-files-found: ignore
+
+      - name: UI tests on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          force-avd-creation: false
+          disable-animations: true
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          working-directory: android
+          script: ./gradlew :app:connectedDebugAndroidTest
+
+      - name: Upload UI test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-ui-test-results
+          path: android/app/build/reports/androidTests/connected/
+          if-no-files-found: ignore
+
+  test-ios:
+    name: Test iOS
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Unit and UI tests
+        working-directory: ios
+        run: |
+          set -euo pipefail
+          DEVICE_NAME=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          data = json.load(sys.stdin)
+          names = []
+          for devices in data.get("devices", {}).values():
+              for device in devices:
+                  if device.get("isAvailable") and "iPhone" in device.get("name", ""):
+                      names.append(device["name"])
+          print(names[-1] if names else "")
+          ')
+          if [ -z "$DEVICE_NAME" ]; then
+            echo "::error::No available iPhone simulator"
+            exit 1
+          fi
+          echo "Using simulator: $DEVICE_NAME"
+          xcodebuild test \
+            -project TodayInSpaceHistory.xcodeproj \
+            -scheme TodayInSpaceHistory \
+            -destination "platform=iOS Simulator,name=$DEVICE_NAME" \
+            -resultBundlePath "$RUNNER_TEMP/TodayInSpaceHistory.xcresult"
+
+      - name: Upload xcresult
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-xcresult
+          path: ${{ runner.temp }}/TodayInSpaceHistory.xcresult
+          if-no-files-found: ignore
+
   android:
+    needs: [test-android]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -78,6 +172,7 @@ jobs:
             --release-notes "CI build ${{ github.sha }}"
 
   ios:
+    needs: [test-ios]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4

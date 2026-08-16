@@ -33,8 +33,12 @@ Workflow: [`.github/workflows/firebase-distribute.yml`](.github/workflows/fireba
 
 Runs on push to `main` and via **Actions → Firebase App Distribution → Run workflow**.
 
-| Job | What testers get |
-|-----|------------------|
+Tests run first per platform. The Android distribution job starts only after `test-android` succeeds; iOS distribution starts only after `test-ios` succeeds. One platform failing does not block the other.
+
+| Job | What it does |
+|-----|----------------|
+| **test-android** | `./gradlew :app:testDebugUnitTest` then Compose UI tests on an API 34 emulator |
+| **test-ios** | `xcodebuild test` (unit + UI, `-UITestStub`) on an iPhone simulator |
 | **android** | Release APK on Firebase App Distribution (debug-keystore signed, installable) |
 | **ios** | Always built and uploaded to Firebase. Without Apple signing secrets this is an **unsigned IPA**: the release shows up in App Distribution, but **it will not install on iPhones**. A paid Apple Developer Program (Ad Hoc cert + profile) is still required for a working device build. |
 
