@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
+import miko.todayinspacehistory.ui.subviews.Photo
 import miko.todayinspacehistory.util.AccessibilityIdentifiers
 import miko.todayinspacehistory.util.StyleConstants
 
@@ -119,42 +117,33 @@ private fun ImageSection(
     title: String?,
     isLoading: Boolean,
 ) {
-    val shape = RoundedCornerShape(50.dp)
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)
-            .clip(shape),
+            .clip(RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center,
     ) {
-        when {
-            imageUrl != null -> {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize(),
-                )
-                if (title != null) {
-                    Text(
-                        text = title,
-                        color = Color.Black,
-                        fontSize = 15.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .padding(start = 0.dp, end = 20.dp, bottom = 20.dp)
-                            .fillMaxWidth()
-                            .background(Color.White.copy(alpha = 0.5f))
-                            .padding(8.dp)
-                            .testTag(AccessibilityIdentifiers.IMAGE_TITLE),
-                    )
-                }
-            }
-            isLoading -> CircularProgressIndicator(
-                color = Color.White,
-                modifier = Modifier.testTag(AccessibilityIdentifiers.LOADING),
+        Photo(
+            url = imageUrl,
+            isLoading = isLoading,
+            contentDescription = title,
+            modifier = Modifier.fillMaxSize(),
+        )
+        if (title != null) {
+            Text(
+                text = title,
+                color = Color.Black,
+                fontSize = 15.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(end = 20.dp, bottom = 20.dp)
+                    .fillMaxWidth()
+                    .background(Color.White.copy(alpha = 0.5f))
+                    .padding(12.dp)
+                    .testTag(AccessibilityIdentifiers.IMAGE_TITLE),
             )
         }
     }
