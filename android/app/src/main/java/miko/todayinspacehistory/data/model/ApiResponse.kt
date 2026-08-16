@@ -3,6 +3,7 @@ package miko.todayinspacehistory.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.Calendar
+import java.util.GregorianCalendar
 
 @Serializable
 data class ApiResponse(
@@ -31,17 +32,18 @@ data class Item(
 ) {
     /** True when `date_created` falls on today's month and day (any year). */
     val matchesTodaysAnniversary: Boolean
-        get() {
-            val raw = data?.firstOrNull()?.dateCreated ?: return false
-            if (raw.length < 10) return false
-            val parts = raw.take(10).split("-")
-            if (parts.size != 3) return false
-            val month = parts[1].toIntOrNull() ?: return false
-            val day = parts[2].toIntOrNull() ?: return false
-            val calendar = Calendar.getInstance()
-            return month == calendar.get(Calendar.MONTH) + 1 &&
-                day == calendar.get(Calendar.DAY_OF_MONTH)
-        }
+        get() = matchesAnniversary()
+
+    fun matchesAnniversary(now: Calendar = GregorianCalendar()): Boolean {
+        val raw = data?.firstOrNull()?.dateCreated ?: return false
+        if (raw.length < 10) return false
+        val parts = raw.take(10).split("-")
+        if (parts.size != 3) return false
+        val month = parts[1].toIntOrNull() ?: return false
+        val day = parts[2].toIntOrNull() ?: return false
+        return month == now.get(Calendar.MONTH) + 1 &&
+            day == now.get(Calendar.DAY_OF_MONTH)
+    }
 }
 
 @Serializable

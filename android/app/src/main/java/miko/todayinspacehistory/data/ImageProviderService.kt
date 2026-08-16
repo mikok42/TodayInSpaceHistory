@@ -4,6 +4,8 @@ import miko.todayinspacehistory.data.model.Item
 import miko.todayinspacehistory.data.network.NetworkClient
 import miko.todayinspacehistory.data.network.NetworkClientImpl
 import miko.todayinspacehistory.util.rewritingHTTPSchemeToHTTPS
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 data class TodaysImage(
     val item: Item,
@@ -16,12 +18,13 @@ interface ImageProviderService {
 
 class ImageProviderServiceImpl(
     private val client: NetworkClient = NetworkClientImpl(),
+    private val now: () -> Calendar = { GregorianCalendar() },
 ) : ImageProviderService {
 
     override suspend fun loadTodaysImage(): TodaysImage {
         val response = client.search()
         val items = response.collection.items.orEmpty()
-        val todaysItems = items.filter { it.matchesTodaysAnniversary }
+        val todaysItems = items.filter { it.matchesAnniversary(now()) }
         val pool = if (todaysItems.isEmpty()) items else todaysItems
         val item = pool.randomOrNull()
             ?: throw Errors.ImageProvider.NoItems

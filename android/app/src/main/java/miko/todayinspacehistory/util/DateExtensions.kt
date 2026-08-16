@@ -12,9 +12,9 @@ fun Date.monthName(): String {
     return formatter.format(this)
 }
 
-fun todayDayMonthComponents(): List<String> {
-    val now = Date()
+fun todayDayMonthComponents(now: Date = Date()): List<String> {
     val calendar = GregorianCalendar()
+    calendar.time = now
     val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
     val month = now.monthName()
     return listOf(day, month)
