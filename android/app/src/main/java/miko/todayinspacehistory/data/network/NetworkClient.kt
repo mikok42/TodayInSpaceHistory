@@ -3,6 +3,7 @@ package miko.todayinspacehistory.data.network
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
@@ -59,6 +60,8 @@ class NetworkClientImpl(
             httpClient.get(url) {
                 header(HttpHeaders.Accept, "application/json")
             }.body()
+        } catch (error: ResponseException) {
+            throw Errors.NetworkClient.UnacceptableStatusCode(error.response.status.value)
         } catch (error: Throwable) {
             throw Errors.NetworkClient.RequestFailed(error)
         }
