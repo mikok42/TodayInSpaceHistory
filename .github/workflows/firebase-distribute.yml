@@ -205,15 +205,6 @@ jobs:
           sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
 
-      - name: Require Firebase service account
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
-            echo "::error::Missing secret FIREBASE_SERVICE_ACCOUNT (JSON service account with App Distribution access)"
-            exit 1
-          fi
-
       - name: Resolve iOS signing mode
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -223,7 +214,17 @@ jobs:
             echo "IOS_SIGNING=adhoc" >> "$GITHUB_ENV"
           else
             echo "IOS_SIGNING=unsigned" >> "$GITHUB_ENV"
-            echo "::notice::No Apple signing secrets. Building an unsigned IPA and uploading it to Firebase anyway. Testers cannot install it on iPhones."
+            echo "::notice::No Apple signing secrets. Building an unsigned IPA as a GitHub artifact. Firebase App Distribution rejects unsigned IPAs (no provisioning profile), so the upload is skipped."
+          fi
+
+      - name: Require Firebase service account
+        if: env.IOS_SIGNING == 'adhoc'
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "::error::Missing secret FIREBASE_SERVICE_ACCOUNT (JSON service account with App Distribution access)"
+            exit 1
           fi
 
       - name: Require Apple signing secrets
@@ -375,10 +376,17 @@ jobs:
           path: ios/build/*.ipa
           if-no-files-found: error
 
+      - name: Skip Firebase upload for unsigned IPA
+        if: env.IOS_SIGNING == 'unsigned'
+        run: |
+          echo "::notice::Unsigned IPA cannot be uploaded to Firebase App Distribution. Download ios-release-ipa from this run's artifacts."
+
       - name: Install Firebase CLI
+        if: env.IOS_SIGNING == 'adhoc'
         run: npm install -g firebase-tools
 
       - name: Firebase preflight
+        if: env.IOS_SIGNING == 'adhoc'
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
@@ -387,6 +395,7 @@ jobs:
           firebase appdistribution:groups:list --project "$FIREBASE_PROJECT"
 
       - name: Distribute IPA to Firebase App Distribution
+        if: env.IOS_SIGNING == 'adhoc'
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
@@ -396,13 +405,9 @@ jobs:
           app_id="${FIREBASE_IOS_APP_ID:-$FIREBASE_IOS_APP_ID_DEFAULT}"
           app_id="${app_id//[$'\t\r\n ']}"
           IPA=$(ls ios/build/*.ipa | head -n 1)
-          notes="CI build ${{ github.sha }}"
-          if [ "${IOS_SIGNING}" = "unsigned" ]; then
-            notes="${notes} — unsigned IPA, not installable on devices"
-          fi
           firebase appdistribution:distribute \
             "$IPA" \
             --project "$FIREBASE_PROJECT" \
             --app "$app_id" \
             --groups "$FIREBASE_TESTER_GROUP" \
-            --release-notes "$notes"
+            --release-notes "CI build ${{ github.sha }}"

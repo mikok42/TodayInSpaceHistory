@@ -40,7 +40,7 @@ Tests run first per platform. The Android distribution job starts only after `te
 | **test-android** | `./gradlew :app:testDebugUnitTest` then Compose UI tests on an API 34 emulator |
 | **test-ios** | `xcodebuild test` (unit + UI, `-UITestStub`) on an iPhone simulator |
 | **android** | Release APK on Firebase App Distribution (debug-keystore signed, installable) |
-| **ios** | Always built and uploaded to Firebase. Without Apple signing secrets this is an **unsigned IPA**: the release shows up in App Distribution, but **it will not install on iPhones**. A paid Apple Developer Program (Ad Hoc cert + profile) is still required for a working device build. |
+| **ios** | Always built. Firebase upload happens only for a **signed Ad Hoc IPA**. Without Apple signing secrets CI keeps an **unsigned IPA** as a GitHub artifact; Firebase rejects it (no provisioning profile). A paid Apple Developer Program is required to distribute to testers' iPhones. |
 
 Create a Firebase App Distribution tester group named **`qa`** in the Console.
 
@@ -57,7 +57,7 @@ Optional (defaults are the IDs already in `google-services.json` / `GoogleServic
 | `FIREBASE_ANDROID_APP_ID` | `1:453196059:android:b7e1e9e27b6bf9cceefbbe` |
 | `FIREBASE_IOS_APP_ID` | `1:453196059:ios:3ae822f995de3787eefbbe` |
 
-iOS signing secrets (leave unset to ship an unsigned IPA; set all of them for a real Ad Hoc build):
+iOS signing secrets (leave unset for an unsigned GitHub artifact; set all of them to upload a real Ad Hoc build to Firebase):
 
 | Secret | Purpose |
 |--------|---------|
