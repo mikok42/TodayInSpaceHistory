@@ -31,13 +31,32 @@ Writes `parity-plan.md` at the repo root.
 
 Workflow: [`.github/workflows/firebase-distribute.yml`](.github/workflows/firebase-distribute.yml)
 
-Required GitHub secrets:
+Runs on push to `main` and via **Actions → Firebase App Distribution → Run workflow**.
+
+| Job | What testers get |
+|-----|------------------|
+| **android** | Release APK on Firebase App Distribution (debug-keystore signed, installable) |
+| **ios** | Always built and uploaded to Firebase. Without Apple signing secrets this is an **unsigned IPA**: the release shows up in App Distribution, but **it will not install on iPhones**. A paid Apple Developer Program (Ad Hoc cert + profile) is still required for a working device build. |
+
+Create a Firebase App Distribution tester group named **`qa`** in the Console.
+
+Required GitHub secret:
 
 | Secret | Purpose |
 |--------|---------|
 | `FIREBASE_SERVICE_ACCOUNT` | JSON service account with App Distribution access |
+
+Optional (defaults are the IDs already in `google-services.json` / `GoogleService-Info.plist`):
+
+| Secret | Purpose |
+|--------|---------|
 | `FIREBASE_ANDROID_APP_ID` | `1:453196059:android:b7e1e9e27b6bf9cceefbbe` |
 | `FIREBASE_IOS_APP_ID` | `1:453196059:ios:3ae822f995de3787eefbbe` |
+
+iOS signing secrets (leave unset to ship an unsigned IPA; set all of them for a real Ad Hoc build):
+
+| Secret | Purpose |
+|--------|---------|
 | `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API key id |
 | `APP_STORE_CONNECT_API_ISSUER_ID` | App Store Connect issuer id |
 | `APP_STORE_CONNECT_API_KEY` | Contents of the `.p8` key |
@@ -45,7 +64,3 @@ Required GitHub secrets:
 | `BUILD_PROVISION_PROFILE_BASE64` | Base64-encoded `.mobileprovision` (Ad Hoc) |
 | `P12_PASSWORD` | Password for the `.p12` |
 | `KEYCHAIN_PASSWORD` | Temporary CI keychain password |
-
-Create a Firebase App Distribution tester group named **`qa`** in the Console.
-
-Android CI uses a release APK signed with the debug keystore (installable by testers without Play App Signing). The iOS job fails with a clear error until the Apple signing secrets above are set.
