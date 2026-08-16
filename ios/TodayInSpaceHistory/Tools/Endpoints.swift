@@ -19,7 +19,7 @@ enum Endpoints: String {
             return [
                 URLQueryItem(
                     name: "description",
-                    value: Date.todayDayMonthComponents.joined(separator: " ")
+                    value: Date.todayDayMonthComponents().joined(separator: " ")
                 ),
                 URLQueryItem(name: "media_type", value: "image")
             ]

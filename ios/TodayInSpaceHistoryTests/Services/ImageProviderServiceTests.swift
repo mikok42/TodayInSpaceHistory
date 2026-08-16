@@ -11,18 +11,18 @@ final class ImageProviderServiceTests: XCTestCase {
         let client = MockNetworkClient()
         let anniversary = TestFixtures.item(
             title: "Anniversary",
-            dateCreated: TestFixtures.todaysAnniversaryDateCreated,
+            dateCreated: TestFixtures.anniversaryDateCreated,
             href: "https://example.com/a.json"
         )
         let other = TestFixtures.item(
             title: "Other",
-            dateCreated: TestFixtures.nonAnniversaryDateCreated,
+            dateCreated: TestFixtures.otherDateCreated,
             href: "https://example.com/o.json"
         )
         client.searchResult = .success(TestFixtures.apiResponse(items: [other, anniversary]))
         client.fetchImagesResult = .success(["https://images.example.com/large.jpg"])
 
-        let service = ImageProviderService(client: client)
+        let service = ImageProviderService(client: client, now: { TestFixtures.july20_2026 })
         let result = try await service.loadTodaysImage()
 
         XCTAssertEqual(result.item.data?.first?.title, "Anniversary")
@@ -34,13 +34,13 @@ final class ImageProviderServiceTests: XCTestCase {
         let client = MockNetworkClient()
         let other = TestFixtures.item(
             title: "Fallback",
-            dateCreated: TestFixtures.nonAnniversaryDateCreated,
+            dateCreated: TestFixtures.otherDateCreated,
             href: "https://example.com/f.json"
         )
         client.searchResult = .success(TestFixtures.apiResponse(items: [other]))
         client.fetchImagesResult = .success(["http://images.example.com/medium.jpg"])
 
-        let service = ImageProviderService(client: client)
+        let service = ImageProviderService(client: client, now: { TestFixtures.july20_2026 })
         let result = try await service.loadTodaysImage()
 
         XCTAssertEqual(result.item.data?.first?.title, "Fallback")
@@ -50,7 +50,7 @@ final class ImageProviderServiceTests: XCTestCase {
     func testThrowsNoItems() async {
         let client = MockNetworkClient()
         client.searchResult = .success(TestFixtures.apiResponse(items: []))
-        let service = ImageProviderService(client: client)
+        let service = ImageProviderService(client: client, now: { TestFixtures.july20_2026 })
 
         do {
             _ = try await service.loadTodaysImage()
@@ -65,11 +65,11 @@ final class ImageProviderServiceTests: XCTestCase {
     func testThrowsMissingAssetURL() async {
         let client = MockNetworkClient()
         let item = TestFixtures.item(
-            dateCreated: TestFixtures.todaysAnniversaryDateCreated,
+            dateCreated: TestFixtures.anniversaryDateCreated,
             href: nil
         )
         client.searchResult = .success(TestFixtures.apiResponse(items: [item]))
-        let service = ImageProviderService(client: client)
+        let service = ImageProviderService(client: client, now: { TestFixtures.july20_2026 })
 
         do {
             _ = try await service.loadTodaysImage()
@@ -84,7 +84,7 @@ final class ImageProviderServiceTests: XCTestCase {
     func testRewritesOnlyHTTPScheme() async throws {
         let client = MockNetworkClient()
         let item = TestFixtures.item(
-            dateCreated: TestFixtures.todaysAnniversaryDateCreated,
+            dateCreated: TestFixtures.anniversaryDateCreated,
             href: "https://example.com/a.json"
         )
         client.searchResult = .success(TestFixtures.apiResponse(items: [item]))
@@ -93,7 +93,7 @@ final class ImageProviderServiceTests: XCTestCase {
             "https://cdn.example.com/original.jpg"
         ])
 
-        let service = ImageProviderService(client: client)
+        let service = ImageProviderService(client: client, now: { TestFixtures.july20_2026 })
         let result = try await service.loadTodaysImage()
 
         XCTAssertEqual(

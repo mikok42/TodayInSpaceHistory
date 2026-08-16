@@ -36,15 +36,20 @@ struct Item: Codable {
     
     /// True when `date_created` falls on today's month and day (any year).
     var matchesTodaysAnniversary: Bool {
+        matchesAnniversary(of: Date())
+    }
+
+    func matchesAnniversary(
+        of date: Date,
+        calendar: Calendar = Calendar(identifier: .gregorian)
+    ) -> Bool {
         guard let raw = data?.first?.dateCreated, raw.count >= 10 else { return false }
         let parts = raw.prefix(10).split(separator: "-")
         guard parts.count == 3,
               let month = Int(parts[1]),
               let day = Int(parts[2]) else { return false }
-        let calendar = Calendar.current
-        let today = Date()
-        return month == calendar.component(.month, from: today)
-            && day == calendar.component(.day, from: today)
+        return month == calendar.component(.month, from: date)
+            && day == calendar.component(.day, from: date)
     }
 }
 
@@ -59,7 +64,7 @@ struct SearchResult: Codable {
     let dateCreated: String?
     let description: String?
     let keywords: [String]?
-    let media_type: String?
+    let mediaType: String?
     let nasaId: String?
     let title: String?
 }

@@ -7,6 +7,19 @@ import Foundation
 @testable import TodayInSpaceHistory
 
 enum TestFixtures {
+    static let anniversaryDateCreated = "1969-07-20T20:17:40Z"
+    static let otherDateCreated = "1971-08-16T00:00:00Z"
+
+    static var july20_2026: Date {
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.date(from: DateComponents(year: 2026, month: 7, day: 20, hour: 12))!
+    }
+
+    static var august9_2026: Date {
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.date(from: DateComponents(year: 2026, month: 8, day: 9, hour: 12))!
+    }
+
     static func item(
         title: String? = "Title",
         description: String? = "Description",
@@ -18,7 +31,7 @@ enum TestFixtures {
             dateCreated: dateCreated,
             description: description,
             keywords: nil,
-            media_type: "image",
+            mediaType: "image",
             nasaId: "id",
             title: title
         )
@@ -33,25 +46,5 @@ enum TestFixtures {
                 items: items
             )
         )
-    }
-
-    /// `date_created` for today's month/day in an arbitrary past year.
-    static var todaysAnniversaryDateCreated: String {
-        let calendar = Calendar(identifier: .gregorian)
-        let today = Date()
-        let month = calendar.component(.month, from: today)
-        let day = calendar.component(.day, from: today)
-        return String(format: "2001-%02d-%02dT12:00:00Z", month, day)
-    }
-
-    /// A `date_created` that is deliberately NOT today's month+day anniversary.
-    /// Same month, day flipped to 1 (or 2 if today is already the 1st).
-    static var nonAnniversaryDateCreated: String {
-        let calendar = Calendar(identifier: .gregorian)
-        let today = Date()
-        let month = calendar.component(.month, from: today)
-        let todayDay = calendar.component(.day, from: today)
-        let day = todayDay == 1 ? 2 : 1
-        return String(format: "2001-%02d-%02dT12:00:00Z", month, day)
     }
 }

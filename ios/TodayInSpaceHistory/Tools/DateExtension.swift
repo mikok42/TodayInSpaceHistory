@@ -16,11 +16,10 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    static var todayDayMonthComponents: [String] {
-        let date = Date()
+    static func todayDayMonthComponents(now: Date = Date()) -> [String] {
         let calendar = Calendar(identifier: .gregorian)
-        let day = String(calendar.component(.day, from: date))
-        let month = date.month
+        let day = String(calendar.component(.day, from: now))
+        let month = now.month
         return [day, month]
     }
 }

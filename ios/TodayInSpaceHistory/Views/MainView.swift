@@ -125,7 +125,7 @@ private struct MainViewPreviewImageProvider: ImageProviderServiceProtocol {
             dateCreated: "2014-03-16T00:00:00Z",
             description: "Virtus.pro lift the trophy at EMS One Katowice 2014.",
             keywords: nil,
-            media_type: "image",
+            mediaType: "image",
             nasaId: "preview-mock",
             title: "EMS One Katowice 2014"
         )

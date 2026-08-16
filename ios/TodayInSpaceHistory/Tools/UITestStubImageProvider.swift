@@ -21,7 +21,7 @@ final class UITestStubImageProvider: ImageProviderServiceProtocol {
             dateCreated: "1969-07-20T00:00:00Z",
             description: Self.stubDescription,
             keywords: nil,
-            media_type: "image",
+            mediaType: "image",
             nasaId: "stub",
             title: Self.stubTitle
         )

@@ -13,15 +13,20 @@ protocol ImageProviderServiceProtocol {
 
 final class ImageProviderService: ImageProviderServiceProtocol {
     private let client: NetworkClientProtocol
+    private let now: () -> Date
     
-    init(client: NetworkClientProtocol = NetworkClient()) {
+    init(
+        client: NetworkClientProtocol = NetworkClient(),
+        now: @escaping () -> Date = Date.init
+    ) {
         self.client = client
+        self.now = now
     }
     
     func loadTodaysImage() async throws -> (item: Item, imageURLs: [String]) {
         let response: APIResponse = try await client.makeRequest(endpoint: .search)
         let items = response.collection.items ?? []
-        let todaysItems = items.filter(\.matchesTodaysAnniversary)
+        let todaysItems = items.filter { $0.matchesAnniversary(of: now()) }
         guard let item = (todaysItems.isEmpty ? items : todaysItems).randomElement() else {
             throw Errors.ImageProvider.noItems
         }

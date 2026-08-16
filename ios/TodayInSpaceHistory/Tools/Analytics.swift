@@ -10,13 +10,20 @@ import FirebaseAnalytics
 
 class AnalyticsTimer {
     internal let reportName: String
+    private let onReport: (String, TimeInterval) -> Void
     
     private var startTime: TimeInterval = 0
     private var endTime: TimeInterval = 0
     private var duration: TimeInterval { endTime - startTime }
     
-    init(reportName: String) {
+    init(
+        reportName: String,
+        onReport: @escaping (String, TimeInterval) -> Void = { name, duration in
+            FirebaseAnalytics.Analytics.logEvent(name, parameters: ["duration_ms": duration])
+        }
+    ) {
         self.reportName = reportName
+        self.onReport = onReport
     }
     
     func startTimer() {
@@ -28,6 +35,6 @@ class AnalyticsTimer {
     }
     
     func reportToAnalytics() {
-        FirebaseAnalytics.Analytics.logEvent(reportName, parameters: ["duration_ms": duration])
+        onReport(reportName, duration)
     }
 }

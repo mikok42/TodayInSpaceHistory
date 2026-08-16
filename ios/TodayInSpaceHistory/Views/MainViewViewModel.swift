@@ -11,7 +11,7 @@ import Observation
 @Observable
 final class MainViewViewModel {
     private let imageProvider: ImageProviderServiceProtocol
-    let timer = AnalyticsTimer(reportName: "downloading")
+    private let timer: AnalyticsTimer
     
     var title: String?
     var description: String?
@@ -19,8 +19,12 @@ final class MainViewViewModel {
     var dayLabel: String = Date().formatted(.dateTime.day().month(.wide))
     var isLoading = false
     
-    init(imageProvider: ImageProviderServiceProtocol = ImageProviderService()) {
+    init(
+        imageProvider: ImageProviderServiceProtocol = ImageProviderService(),
+        timer: AnalyticsTimer = AnalyticsTimer(reportName: "downloading")
+    ) {
         self.imageProvider = imageProvider
+        self.timer = timer
     }
     
     @MainActor
