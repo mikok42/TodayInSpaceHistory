@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+import UIKit
 
 struct MainView: View {
     @State private var viewModel: MainViewViewModel
@@ -27,6 +27,7 @@ struct MainView: View {
         .foregroundStyle(.white)
         .background(.black)
         .task {
+            guard viewModel.imageURL == nil else { return }
             await viewModel.fetchData()
         }
     }
@@ -58,39 +59,25 @@ struct MainView: View {
 
     @ViewBuilder
     private var imageSection: some View {
-        if let imageURL = viewModel.imageURL, let url = URL(string: imageURL) {
-            // Container-first layout: fill image cannot expand the parent width.
-            RoundedRectangle(cornerRadius: 50)
-                .fill(.clear)
-                .frame(height: 300)
-                .frame(maxWidth: .infinity)
-                .overlay {
-                    KFImage(url)
-                        .fade(duration: 0.2)
-                        .resizable()
-                        .scaledToFill()
-                }
-                .overlay(alignment: .bottomLeading) {
-                    if let title = viewModel.title {
-                        Text(title)
-                            .font(.custom(StyleConstants.boldFont, size: 15))
-                            .foregroundStyle(.black)
-                            .multilineTextAlignment(.leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.white.opacity(0.5))
-                            .padding([.bottom, .trailing], 20)
-                            .accessibilityIdentifier(AccessibilityIdentifiers.imageTitle)
-                    }
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 50))
-        } else if viewModel.isLoading {
-            ProgressView()
-                .frame(height: 300)
-                .frame(maxWidth: .infinity)
-                .accessibilityIdentifier(AccessibilityIdentifiers.loading)
+        ZStack(alignment: .bottom) {
+            Photo(urlString: viewModel.imageURL, isLoading: viewModel.isLoading)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            if let title = viewModel.title {
+                Text(title)
+                    .font(.custom(StyleConstants.boldFont, size: 15))
+                    .foregroundStyle(.black)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .background(.white.opacity(0.5))
+                    .padding([.bottom, .trailing], 20)
+                    .accessibilityIdentifier(AccessibilityIdentifiers.imageTitle)
+            }
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: 300)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     private var descriptionSection: some View {
@@ -105,6 +92,44 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    MainView()
+#Preview("Loaded") {
+    let provider = MainViewPreviewImageProvider()
+    let viewModel = MainViewViewModel(imageProvider: provider)
+    viewModel.title = "EMS One Katowice 2014"
+    viewModel.description = "Virtus.pro lift the trophy at EMS One Katowice 2014."
+    viewModel.imageURL = provider.fileURL?.absoluteString
+    viewModel.isLoading = false
+    return MainView(viewModel: viewModel)
+}
+
+private struct MainViewPreviewImageProvider: ImageProviderServiceProtocol {
+    var fileURL: URL? {
+        if let url = Bundle.main.url(forResource: "PreviewMock", withExtension: "jpg") {
+            return url
+        }
+        guard let image = UIImage(named: "PreviewMock"),
+              let data = image.jpegData(compressionQuality: 0.9) else {
+            return nil
+        }
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("PreviewMock.jpg")
+        try? data.write(to: url)
+        return url
+    }
+
+    func loadTodaysImage() async throws -> (item: Item, imageURLs: [String]) {
+        guard let imageURL = fileURL else {
+            throw Errors.ImageProvider.missingAssetURL
+        }
+        let result = SearchResult(
+            center: nil,
+            dateCreated: "2014-03-16T00:00:00Z",
+            description: "Virtus.pro lift the trophy at EMS One Katowice 2014.",
+            keywords: nil,
+            media_type: "image",
+            nasaId: "preview-mock",
+            title: "EMS One Katowice 2014"
+        )
+        let item = Item(data: [result], links: nil, href: nil)
+        return (item, [imageURL.absoluteString])
+    }
 }

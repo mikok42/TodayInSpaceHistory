@@ -28,7 +28,9 @@
 		BF0139B02E244289A79E4412 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622BA0CC88DE4B66AC18A7F0 /* Endpoints.swift */; };
 		D00F76DF2700A4700093E2E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76DE2700A4700093E2E4 /* AppDelegate.swift */; };
 		D00F76E12700A4700093E2E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76E02700A4700093E2E4 /* SceneDelegate.swift */; };
+		A11C00000000000000000041 /* PreviewMock.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000040 /* PreviewMock.jpg */; };
 		D00F76E82700A4710093E2E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D00F76E72700A4710093E2E4 /* Assets.xcassets */; };
+		A11C00000000000000000051 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C00000000000000000050 /* Photo.swift */; };
 		D00F76FA2700A8640093E2E4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76F92700A8640093E2E4 /* MainView.swift */; };
 		D00F76FE2700B1FF0093E2E4 /* StyleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76FD2700B1FF0093E2E4 /* StyleConstants.swift */; };
 		D00F77002700B6320093E2E4 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00F76FF2700B6320093E2E4 /* DateExtension.swift */; };
@@ -64,6 +66,7 @@
 		622BA0CC88DE4B66AC18A7F0 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		6F2040D1ECAF43BE955655F1 /* ImageProviderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProviderService.swift; sourceTree = "<group>"; };
 		A11C00000000000000000000 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
+		A11C00000000000000000040 /* PreviewMock.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PreviewMock.jpg; sourceTree = "<group>"; };
 		A11C00000000000000000001 /* UITestStubImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestStubImageProvider.swift; sourceTree = "<group>"; };
 		A11C00000000000000000004 /* TodayInSpaceHistoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodayInSpaceHistoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11C0000000000000000001B /* MockNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkClient.swift; sourceTree = "<group>"; };
@@ -82,6 +85,7 @@
 		D00F76E02700A4700093E2E4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D00F76E72700A4710093E2E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D00F76EC2700A4710093E2E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A11C00000000000000000050 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		D00F76F92700A8640093E2E4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D00F76FD2700B1FF0093E2E4 /* StyleConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleConstants.swift; sourceTree = "<group>"; };
 		D00F76FF2700B6320093E2E4 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -206,19 +210,37 @@
 				D00F76DE2700A4700093E2E4 /* AppDelegate.swift */,
 				D00F76E02700A4700093E2E4 /* SceneDelegate.swift */,
 				D00F76E72700A4710093E2E4 /* Assets.xcassets */,
+				A11C00000000000000000042 /* Preview Content */,
 				D00F76EC2700A4710093E2E4 /* Info.plist */,
 				D0DC916327071DE400D9F970 /* GoogleService-Info.plist */,
 			);
 			path = TodayInSpaceHistory;
 			sourceTree = "<group>";
 		};
+		A11C00000000000000000042 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A11C00000000000000000040 /* PreviewMock.jpg */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		D00F76F32700A82B0093E2E4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A11C00000000000000000052 /* Subviews */,
 				D00F76F92700A8640093E2E4 /* MainView.swift */,
 				D0A4F83D3028E70000733E58 /* MainViewViewModel.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A11C00000000000000000052 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				A11C00000000000000000050 /* Photo.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		D00F76F42700A8330093E2E4 /* Tools */ = {
@@ -377,6 +399,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00F76E82700A4710093E2E4 /* Assets.xcassets in Resources */,
+				A11C00000000000000000041 /* PreviewMock.jpg in Resources */,
 				D0DC916427071DE400D9F970 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,6 +440,7 @@
 				6999591BB5F94259B5CF1C76 /* String+Extensions.swift in Sources */,
 				A5EB25CBE05444418200B5B3 /* ImageProviderService.swift in Sources */,
 				D00F76FA2700A8640093E2E4 /* MainView.swift in Sources */,
+				A11C00000000000000000051 /* Photo.swift in Sources */,
 				D0A4F83E3028E70000733E58 /* MainViewViewModel.swift in Sources */,
 				D00F770B2700C0160093E2E4 /* APIResponse.swift in Sources */,
 				D07490DB270B404A00122A62 /* Analytics.swift in Sources */,
@@ -668,6 +692,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TodayInSpaceHistory/Preview Content\"";
 				DEVELOPMENT_TEAM = PNR29ZCK6M;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodayInSpaceHistory/Info.plist;
@@ -697,6 +722,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TodayInSpaceHistory/Preview Content\"";
 				DEVELOPMENT_TEAM = PNR29ZCK6M;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodayInSpaceHistory/Info.plist;
