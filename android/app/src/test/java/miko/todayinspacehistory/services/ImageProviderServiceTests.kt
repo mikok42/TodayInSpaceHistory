@@ -16,18 +16,18 @@ class ImageProviderServiceTests {
         val client = MockNetworkClient()
         val anniversary = TestFixtures.item(
             title = "Anniversary",
-            dateCreated = TestFixtures.todaysAnniversaryDateCreated,
+            dateCreated = TestFixtures.ANNIVERSARY_DATE_CREATED,
             href = "https://example.com/a.json",
         )
         val other = TestFixtures.item(
             title = "Other",
-            dateCreated = TestFixtures.nonAnniversaryDateCreated,
+            dateCreated = TestFixtures.OTHER_DATE_CREATED,
             href = "https://example.com/o.json",
         )
         client.searchResult = Result.success(TestFixtures.apiResponse(listOf(other, anniversary)))
         client.fetchImagesResult = Result.success(listOf("https://images.example.com/large.jpg"))
 
-        val service = ImageProviderServiceImpl(client = client)
+        val service = ImageProviderServiceImpl(client = client, now = { TestFixtures.july20_2026() })
         val result = service.loadTodaysImage()
 
         assertEquals("Anniversary", result.item.data?.first()?.title)
@@ -40,13 +40,13 @@ class ImageProviderServiceTests {
         val client = MockNetworkClient()
         val other = TestFixtures.item(
             title = "Fallback",
-            dateCreated = TestFixtures.nonAnniversaryDateCreated,
+            dateCreated = TestFixtures.OTHER_DATE_CREATED,
             href = "https://example.com/f.json",
         )
         client.searchResult = Result.success(TestFixtures.apiResponse(listOf(other)))
         client.fetchImagesResult = Result.success(listOf("http://images.example.com/medium.jpg"))
 
-        val service = ImageProviderServiceImpl(client = client)
+        val service = ImageProviderServiceImpl(client = client, now = { TestFixtures.july20_2026() })
         val result = service.loadTodaysImage()
 
         assertEquals("Fallback", result.item.data?.first()?.title)
@@ -57,7 +57,7 @@ class ImageProviderServiceTests {
     fun throwsNoItems() = runTest {
         val client = MockNetworkClient()
         client.searchResult = Result.success(TestFixtures.apiResponse(emptyList()))
-        val service = ImageProviderServiceImpl(client = client)
+        val service = ImageProviderServiceImpl(client = client, now = { TestFixtures.july20_2026() })
 
         try {
             service.loadTodaysImage()
@@ -71,11 +71,11 @@ class ImageProviderServiceTests {
     fun throwsMissingAssetURL() = runTest {
         val client = MockNetworkClient()
         val item = TestFixtures.item(
-            dateCreated = TestFixtures.todaysAnniversaryDateCreated,
+            dateCreated = TestFixtures.ANNIVERSARY_DATE_CREATED,
             href = null,
         )
         client.searchResult = Result.success(TestFixtures.apiResponse(listOf(item)))
-        val service = ImageProviderServiceImpl(client = client)
+        val service = ImageProviderServiceImpl(client = client, now = { TestFixtures.july20_2026() })
 
         try {
             service.loadTodaysImage()
@@ -89,7 +89,7 @@ class ImageProviderServiceTests {
     fun rewritesOnlyHTTPScheme() = runTest {
         val client = MockNetworkClient()
         val item = TestFixtures.item(
-            dateCreated = TestFixtures.todaysAnniversaryDateCreated,
+            dateCreated = TestFixtures.ANNIVERSARY_DATE_CREATED,
             href = "https://example.com/a.json",
         )
         client.searchResult = Result.success(TestFixtures.apiResponse(listOf(item)))
@@ -100,7 +100,7 @@ class ImageProviderServiceTests {
             ),
         )
 
-        val service = ImageProviderServiceImpl(client = client)
+        val service = ImageProviderServiceImpl(client = client, now = { TestFixtures.july20_2026() })
         val result = service.loadTodaysImage()
 
         assertEquals(

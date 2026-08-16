@@ -8,6 +8,23 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 object TestFixtures {
+    const val ANNIVERSARY_DATE_CREATED = "1969-07-20T20:17:40Z"
+    const val OTHER_DATE_CREATED = "1971-08-16T00:00:00Z"
+
+    fun july20_2026(): Calendar {
+        return GregorianCalendar().apply {
+            clear()
+            set(2026, Calendar.JULY, 20, 12, 0, 0)
+        }
+    }
+
+    fun august9_2026(): Calendar {
+        return GregorianCalendar().apply {
+            clear()
+            set(2026, Calendar.AUGUST, 9, 12, 0, 0)
+        }
+    }
+
     fun item(
         title: String? = "Title",
         description: String? = "Description",
@@ -35,26 +52,4 @@ object TestFixtures {
             ),
         )
     }
-
-    /** `date_created` for today's month/day in an arbitrary past year. */
-    val todaysAnniversaryDateCreated: String
-        get() {
-            val calendar = GregorianCalendar()
-            val month = calendar.get(Calendar.MONTH) + 1
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-            return "2001-%02d-%02dT12:00:00Z".format(month, day)
-        }
-
-    /**
-     * A `date_created` that is deliberately NOT today's month+day anniversary.
-     * Same month, day flipped to 1 (or 2 if today is already the 1st).
-     */
-    val nonAnniversaryDateCreated: String
-        get() {
-            val calendar = GregorianCalendar()
-            val month = calendar.get(Calendar.MONTH) + 1
-            val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
-            val day = if (todayDay == 1) 2 else 1
-            return "2001-%02d-%02dT12:00:00Z".format(month, day)
-        }
 }
