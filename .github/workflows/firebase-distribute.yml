@@ -170,22 +170,20 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+      - name: Firebase preflight
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          python3 "$GITHUB_WORKSPACE/scripts/firebase-preflight.py"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
+          firebase appdistribution:groups:list --project "$FIREBASE_PROJECT"
+
       - name: Distribute APK to Firebase App Distribution
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
         run: |
-          python3 - <<'PY'
-          import json, os, pathlib
-          raw = os.environ["FIREBASE_SERVICE_ACCOUNT"].strip()
-          try:
-              data = json.loads(raw)
-          except json.JSONDecodeError as error:
-              raise SystemExit(f"FIREBASE_SERVICE_ACCOUNT is not valid JSON: {error}") from error
-          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "firebase-sa.json"
-          path.write_text(json.dumps(data))
-          print(f"Wrote service account for project {data.get('project_id')}")
-          PY
+          python3 "$GITHUB_WORKSPACE/scripts/firebase-preflight.py"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
           app_id="${FIREBASE_ANDROID_APP_ID:-$FIREBASE_ANDROID_APP_ID_DEFAULT}"
           app_id="${app_id//[$'\t\r\n ']}"
@@ -380,22 +378,20 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+      - name: Firebase preflight
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          python3 "$GITHUB_WORKSPACE/scripts/firebase-preflight.py"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
+          firebase appdistribution:groups:list --project "$FIREBASE_PROJECT"
+
       - name: Distribute IPA to Firebase App Distribution
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
         run: |
-          python3 - <<'PY'
-          import json, os, pathlib
-          raw = os.environ["FIREBASE_SERVICE_ACCOUNT"].strip()
-          try:
-              data = json.loads(raw)
-          except json.JSONDecodeError as error:
-              raise SystemExit(f"FIREBASE_SERVICE_ACCOUNT is not valid JSON: {error}") from error
-          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "firebase-sa.json"
-          path.write_text(json.dumps(data))
-          print(f"Wrote service account for project {data.get('project_id')}")
-          PY
+          python3 "$GITHUB_WORKSPACE/scripts/firebase-preflight.py"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
           app_id="${FIREBASE_IOS_APP_ID:-$FIREBASE_IOS_APP_ID_DEFAULT}"
           app_id="${app_id//[$'\t\r\n ']}"
