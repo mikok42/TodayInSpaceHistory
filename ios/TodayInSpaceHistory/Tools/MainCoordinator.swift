@@ -17,7 +17,13 @@ class MainCoordinator: Coordinator {
     }
     
     func start() {
-        let hostingController = UIHostingController(rootView: MainView())
+        let viewModel: MainViewViewModel
+        if ProcessInfo.processInfo.isUITestStubLaunch {
+            viewModel = MainViewViewModel(imageProvider: UITestStubImageProvider())
+        } else {
+            viewModel = MainViewViewModel()
+        }
+        let hostingController = UIHostingController(rootView: MainView(viewModel: viewModel))
         navigationController.pushViewController(hostingController, animated: false)
     }
 }

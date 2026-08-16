@@ -33,7 +33,7 @@ extension Errors {
 }
 
 extension Errors {
-    enum ImageProvider: DescriptiveError {
+    enum ImageProvider: DescriptiveError, Equatable {
         case noItems
         case missingAssetURL
         

@@ -20,6 +20,34 @@
                ReferencedContainer = "container:TodayInSpaceHistory.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A11C00000000000000000005"
+               BuildableName = "TodayInSpaceHistoryTests.xctest"
+               BlueprintName = "TodayInSpaceHistoryTests"
+               ReferencedContainer = "container:TodayInSpaceHistory.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A11C00000000000000000024"
+               BuildableName = "TodayInSpaceHistoryUITests.xctest"
+               BlueprintName = "TodayInSpaceHistoryUITests"
+               ReferencedContainer = "container:TodayInSpaceHistory.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -28,6 +56,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A11C00000000000000000005"
+               BuildableName = "TodayInSpaceHistoryTests.xctest"
+               BlueprintName = "TodayInSpaceHistoryTests"
+               ReferencedContainer = "container:TodayInSpaceHistory.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A11C00000000000000000024"
+               BuildableName = "TodayInSpaceHistoryUITests.xctest"
+               BlueprintName = "TodayInSpaceHistoryUITests"
+               ReferencedContainer = "container:TodayInSpaceHistory.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -29,9 +29,15 @@ final class ImageProviderService: ImageProviderServiceProtocol {
             throw Errors.ImageProvider.missingAssetURL
         }
         let rawURLs: [String] = try await client.fetchImages(url: href)
-        let imageURLs = rawURLs.map {
-            $0.replacingOccurrences(of: "http", with: "https", options: .literal)
-        }
+        let imageURLs = rawURLs.map(\.rewritingHTTPSchemeToHTTPS)
         return (item, imageURLs)
+    }
+}
+
+extension String {
+    /// Rewrites only the `http://` scheme prefix; leaves `https://` unchanged.
+    var rewritingHTTPSchemeToHTTPS: String {
+        guard lowercased().hasPrefix("http://") else { return self }
+        return "https://" + dropFirst("http://".count)
     }
 }

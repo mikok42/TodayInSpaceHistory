@@ -15,6 +15,15 @@ xcuserdata/
 *.xcuserstate
 *.xcscmblueprint
 
+# Xcode test results / coverage
+*.xcresult
+TestResults/
+test-results/
+Coverage/
+*.xccoverage
+*.xccovreport
+*.xccovarchive
+
 # Swift Package Manager
 # Package.resolved under ios/.../xcshareddata/swiftpm/ is committed.
 .build/
