@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import UIKit
 
 enum UITestLaunchArgument {
     static let stub = "-UITestStub"
@@ -16,23 +15,18 @@ final class UITestStubImageProvider: ImageProviderServiceProtocol {
     static let stubDescription = "Stub Description"
     static let stubFallbackImageURL = "https://example.com/images/large.jpg"
 
-    static var stubImageURL: String {
-        previewMockURL?.absoluteString ?? stubFallbackImageURL
-    }
-
-    static var previewMockURL: URL? {
-        let destination = FileManager.default.temporaryDirectory.appendingPathComponent("preview-large.jpg")
-        if let bundled = Bundle.main.url(forResource: "PreviewMock", withExtension: "jpg"),
-           let data = try? Data(contentsOf: bundled) {
-            try? data.write(to: destination)
-            return destination
-        }
-        guard let image = UIImage(named: "PreviewMock"),
-              let data = image.jpegData(compressionQuality: 0.9) else {
+    static let previewMockURL: URL? = {
+        guard let bundled = Bundle.main.url(forResource: "PreviewMock", withExtension: "jpg"),
+              let data = try? Data(contentsOf: bundled) else {
             return nil
         }
+        let destination = FileManager.default.temporaryDirectory.appendingPathComponent("preview-large.jpg")
         try? data.write(to: destination)
         return destination
+    }()
+
+    static var stubImageURL: String {
+        previewMockURL?.absoluteString ?? stubFallbackImageURL
     }
 
     func loadTodaysImage() async throws -> (item: Item, imageURLs: [String]) {

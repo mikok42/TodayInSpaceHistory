@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import miko.todayinspacehistory.ui.subviews.ErrorView
 import miko.todayinspacehistory.ui.subviews.Photo
 import miko.todayinspacehistory.util.AccessibilityIdentifiers
 import miko.todayinspacehistory.util.StyleConstants
@@ -38,9 +39,23 @@ fun MainScreen(
     viewModel: MainViewModel = viewModel(factory = MainViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val error = state.error
+
+    if (error != null) {
+        ErrorView(
+            error = error,
+            onDismiss = viewModel::dismissError,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+        )
+        return
+    }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchData()
+        if (state.imageUrl == null) {
+            viewModel.fetchData()
+        }
     }
 
     Column(

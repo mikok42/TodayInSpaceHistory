@@ -23,6 +23,7 @@ data class MainUiState(
     val imageUrl: String? = null,
     val dayLabel: String = todayDayLabel(),
     val isLoading: Boolean = false,
+    val error: DescriptiveError? = null,
 )
 
 class MainViewModel(
@@ -41,14 +42,20 @@ class MainViewModel(
                 val payload = imageProvider.loadTodaysImage()
                 apply(payload)
             } catch (error: Exception) {
-                val message = (error as? DescriptiveError)?.description ?: error.toString()
+                val descriptive = error as? DescriptiveError
+                val message = descriptive?.description ?: error.toString()
                 Log.e(TAG, message)
+                _uiState.update { it.copy(error = descriptive) }
             } finally {
                 timer.endTimer()
                 timer.reportToAnalytics()
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
+    }
+
+    fun dismissError() {
+        _uiState.update { it.copy(error = null) }
     }
 
     private fun apply(payload: TodaysImage) {
@@ -58,6 +65,7 @@ class MainViewModel(
         val result = payload.item.data?.firstOrNull()
         _uiState.update {
             it.copy(
+                error = null,
                 imageUrl = imageUrl,
                 title = result?.title?.decodedHTMLEntities,
                 description = result?.description?.decodedHTMLEntities,

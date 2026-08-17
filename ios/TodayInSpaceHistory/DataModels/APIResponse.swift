@@ -34,11 +34,7 @@ struct Item: Codable {
     let links: [ItemLinks]?
     let href: String?
     
-    /// True when `date_created` falls on today's month and day (any year).
-    var matchesTodaysAnniversary: Bool {
-        matchesAnniversary(of: Date())
-    }
-
+    /// True when `date_created` falls on the given date's month and day (any year).
     func matchesAnniversary(
         of date: Date,
         calendar: Calendar = Calendar(identifier: .gregorian)

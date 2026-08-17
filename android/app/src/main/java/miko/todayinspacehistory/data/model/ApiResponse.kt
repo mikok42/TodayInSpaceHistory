@@ -30,10 +30,7 @@ data class Item(
     val links: List<ItemLinks>? = null,
     val href: String? = null,
 ) {
-    /** True when `date_created` falls on today's month and day (any year). */
-    val matchesTodaysAnniversary: Boolean
-        get() = matchesAnniversary()
-
+    /** True when `date_created` falls on `now`'s month and day (any year). */
     fun matchesAnniversary(now: Calendar = GregorianCalendar()): Boolean {
         val raw = data?.firstOrNull()?.dateCreated ?: return false
         if (raw.length < 10) return false

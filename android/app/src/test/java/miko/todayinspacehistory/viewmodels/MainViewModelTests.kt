@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import miko.todayinspacehistory.data.Errors
 import miko.todayinspacehistory.data.TodaysImage
+import miko.todayinspacehistory.data.UITestStubImageProvider
 import miko.todayinspacehistory.support.GatedImageProvider
 import miko.todayinspacehistory.support.MockImageProvider
 import miko.todayinspacehistory.support.TestFixtures
@@ -36,6 +37,27 @@ class MainViewModelTests {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+    }
+
+    @Test
+    fun fetchDataSuccessUsesStubContent() {
+        val reports = mutableListOf<Pair<String, Long>>()
+        val viewModel = MainViewModel(
+            imageProvider = UITestStubImageProvider(),
+            timer = AnalyticsTimer(reportName = "downloading") { name, durationMs ->
+                reports += name to durationMs
+            },
+        )
+
+        viewModel.fetchData()
+
+        val state = viewModel.uiState.value
+        assertFalse(state.isLoading)
+        assertEquals(UITestStubImageProvider.STUB_IMAGE_URL, state.imageUrl)
+        assertEquals(UITestStubImageProvider.STUB_TITLE, state.title)
+        assertEquals(UITestStubImageProvider.STUB_DESCRIPTION, state.description)
+        assertEquals(listOf("downloading"), reports.map { it.first })
+        assertTrue(reports.single().second >= 0)
     }
 
     @Test
@@ -94,6 +116,7 @@ class MainViewModelTests {
         assertFalse(state.isLoading)
         assertNull(state.imageUrl)
         assertNull(state.title)
+        assertNotNull(state.error)
         assertEquals("downloading", reports.single().first)
     }
 
