@@ -99,7 +99,7 @@ struct MainView: View {
     viewModel.viewProperties.description = "Virtus.pro lift the trophy at EMS One Katowice 2014."
     viewModel.viewProperties.imageURL = provider.fileURL?.absoluteString
     viewModel.viewProperties.isLoading = false
-    MainView(viewModel: viewModel)
+    return MainView(viewModel: viewModel)
 }
 
 private struct MainViewPreviewImageProvider: ImageProviderServiceProtocol {

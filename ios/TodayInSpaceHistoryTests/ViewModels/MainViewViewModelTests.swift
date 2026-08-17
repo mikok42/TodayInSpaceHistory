@@ -34,11 +34,11 @@ final class MainViewViewModelTests: XCTestCase {
 
         await viewModel.fetchData()
 
-        XCTAssertFalse(viewModel.isLoading)
-        XCTAssertEqual(viewModel.imageURL, "https://cdn.example.com/large.jpg")
-        XCTAssertEqual(viewModel.title, "Apollo & Friends")
-        XCTAssertNotNil(viewModel.description)
-        XCTAssertFalse(viewModel.description?.contains("&#0146;") ?? true)
+        XCTAssertFalse(viewModel.viewProperties.isLoading)
+        XCTAssertEqual(viewModel.viewProperties.imageURL, "https://cdn.example.com/large.jpg")
+        XCTAssertEqual(viewModel.viewProperties.title, "Apollo & Friends")
+        XCTAssertNotNil(viewModel.viewProperties.description)
+        XCTAssertFalse(viewModel.viewProperties.description?.contains("&#0146;") ?? true)
         XCTAssertEqual(reported?.name, "downloading")
         XCTAssertGreaterThanOrEqual(reported?.duration ?? -1, 0)
     }
@@ -55,9 +55,9 @@ final class MainViewViewModelTests: XCTestCase {
 
         await viewModel.fetchData()
 
-        XCTAssertFalse(viewModel.isLoading)
-        XCTAssertNil(viewModel.imageURL)
-        XCTAssertNil(viewModel.title)
+        XCTAssertFalse(viewModel.viewProperties.isLoading)
+        XCTAssertNil(viewModel.viewProperties.imageURL)
+        XCTAssertNil(viewModel.viewProperties.title)
         XCTAssertEqual(reportedName, "downloading")
     }
 
@@ -73,10 +73,10 @@ final class MainViewViewModelTests: XCTestCase {
 
         async let fetch: Void = viewModel.fetchData()
         await provider.waitUntilEntered()
-        XCTAssertTrue(viewModel.isLoading)
+        XCTAssertTrue(viewModel.viewProperties.isLoading)
         provider.release()
         await fetch
-        XCTAssertFalse(viewModel.isLoading)
+        XCTAssertFalse(viewModel.viewProperties.isLoading)
     }
 
     func testFetchDataLeavesImageURLNilWhenNoPreferredSize() async {
@@ -100,8 +100,8 @@ final class MainViewViewModelTests: XCTestCase {
 
         await viewModel.fetchData()
 
-        XCTAssertNil(viewModel.imageURL)
-        XCTAssertEqual(viewModel.title, "Only thumbs")
-        XCTAssertFalse(viewModel.isLoading)
+        XCTAssertNil(viewModel.viewProperties.imageURL)
+        XCTAssertEqual(viewModel.viewProperties.title, "Only thumbs")
+        XCTAssertFalse(viewModel.viewProperties.isLoading)
     }
 }
