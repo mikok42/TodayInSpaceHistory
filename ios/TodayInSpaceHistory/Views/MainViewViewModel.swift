@@ -8,16 +8,24 @@
 import Foundation
 import Observation
 
+struct MainViewState: Observable {
+    var title: String?
+    var description: String?
+    var imageURL: String?
+    var dayLabel: String = Date().formatted(.dateTime.day().month(.wide))
+    var isLoading = true
+    
+    var error: DescriptiveError? = nil
+}
+
+
+
 @Observable
 final class MainViewViewModel {
     private let imageProvider: ImageProviderServiceProtocol
     private let timer: AnalyticsTimer
     
-    var title: String?
-    var description: String?
-    var imageURL: String?
-    var dayLabel: String = Date().formatted(.dateTime.day().month(.wide))
-    var isLoading = false
+    var viewProperties: MainViewState
     
     init(
         imageProvider: ImageProviderServiceProtocol = ImageProviderService(),
@@ -25,33 +33,34 @@ final class MainViewViewModel {
     ) {
         self.imageProvider = imageProvider
         self.timer = timer
+        self.viewProperties = .init()
     }
     
     @MainActor
     func fetchData() async {
-        isLoading = true
+        viewProperties.isLoading = true
         timer.startTimer()
         defer {
             timer.endTimer()
             timer.reportToAnalytics()
-            isLoading = false
+            viewProperties.isLoading = false
         }
         do {
             let (item, imageURLs) = try await imageProvider.loadTodaysImage()
             apply(item: item, imageURLs: imageURLs)
         } catch let error as DescriptiveError {
-            print(error.description)
+            viewProperties.error = error
         } catch {
             print(error)
         }
     }
     
     private func apply(item: Item, imageURLs: [String]) {
-        imageURL = imageURLs.first {
+        viewProperties.imageURL = imageURLs.first {
             $0.contains("large") || $0.contains("medium") || $0.contains("original")
         }
         let result = item.data?.first
-        title = result?.title?.decodedHTMLEntities
-        description = result?.description?.decodedHTMLEntities
+        viewProperties.title = result?.title?.decodedHTMLEntities
+        viewProperties.description = result?.description?.decodedHTMLEntities
     }
 }

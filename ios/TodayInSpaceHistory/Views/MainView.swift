@@ -27,7 +27,7 @@ struct MainView: View {
         .foregroundStyle(.white)
         .background(.black)
         .task {
-            guard viewModel.imageURL == nil else { return }
+            guard viewModel.viewProperties.imageURL == nil else { return }
             await viewModel.fetchData()
         }
     }
@@ -52,7 +52,7 @@ struct MainView: View {
     }
 
     private var dayLabel: some View {
-        Text(viewModel.dayLabel)
+        Text(viewModel.viewProperties.dayLabel)
             .font(.custom(StyleConstants.lightFont, size: 30))
             .accessibilityIdentifier(AccessibilityIdentifiers.dayLabel)
     }
@@ -60,9 +60,9 @@ struct MainView: View {
     @ViewBuilder
     private var imageSection: some View {
         ZStack(alignment: .bottom) {
-            Photo(urlString: viewModel.imageURL, isLoading: viewModel.isLoading)
+            Photo(urlString: viewModel.viewProperties.imageURL, isLoading: viewModel.viewProperties.isLoading)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            if let title = viewModel.title {
+            if let title = viewModel.viewProperties.title {
                 Text(title)
                     .font(.custom(StyleConstants.boldFont, size: 15))
                     .foregroundStyle(.black)
@@ -82,7 +82,7 @@ struct MainView: View {
 
     private var descriptionSection: some View {
         ScrollView {
-            Text(viewModel.description ?? "")
+            Text(viewModel.viewProperties.description ?? "")
                 .font(.custom(StyleConstants.fontName, size: 20))
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
@@ -95,11 +95,11 @@ struct MainView: View {
 #Preview("Loaded") {
     let provider = MainViewPreviewImageProvider()
     let viewModel = MainViewViewModel(imageProvider: provider)
-    viewModel.title = "EMS One Katowice 2014"
-    viewModel.description = "Virtus.pro lift the trophy at EMS One Katowice 2014."
-    viewModel.imageURL = provider.fileURL?.absoluteString
-    viewModel.isLoading = false
-    return MainView(viewModel: viewModel)
+    viewModel.viewProperties.title = "EMS One Katowice 2014"
+    viewModel.viewProperties.description = "Virtus.pro lift the trophy at EMS One Katowice 2014."
+    viewModel.viewProperties.imageURL = provider.fileURL?.absoluteString
+    viewModel.viewProperties.isLoading = false
+    MainView(viewModel: viewModel)
 }
 
 private struct MainViewPreviewImageProvider: ImageProviderServiceProtocol {
