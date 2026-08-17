@@ -15,7 +15,8 @@ struct MainView: View {
     }
 
     var body: some View {
-        if let error = viewModel.viewProperties.error { ErrorView(error: error, onDismiss: { viewModel.viewProperties.error = nil }) }
+        if let error = viewModel.viewProperties.error { ErrorView(error: error, onDismiss: {
+            Task { await viewModel.reload() } }) }
         else {
             VStack(alignment: .leading, spacing: StyleConstants.labelsMargins) {
                 header
