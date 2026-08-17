@@ -68,26 +68,11 @@ struct Photo: View {
 }
 
 #Preview("Local") {
-    Photo(url: PreviewMockFile().url)
+    Photo(url: UITestStubImageProvider.previewMockURL)
         .frame(height: 200)
 }
 
 #Preview("Missing") {
     Photo(url: nil)
         .frame(height: 200)
-}
-
-private struct PreviewMockFile {
-    var url: URL? {
-        if let url = Bundle.main.url(forResource: "PreviewMock", withExtension: "jpg") {
-            return url
-        }
-        guard let image = UIImage(named: "PreviewMock"),
-              let data = image.jpegData(compressionQuality: 0.9) else {
-            return nil
-        }
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("PreviewMock.jpg")
-        try? data.write(to: url)
-        return url
-    }
 }

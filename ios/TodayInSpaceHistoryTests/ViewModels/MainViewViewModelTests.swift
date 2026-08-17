@@ -8,7 +8,26 @@ import XCTest
 
 @MainActor
 final class MainViewViewModelTests: XCTestCase {
-    func testFetchDataSuccessDecodesAndPicksPreferredImage() async {
+    func testFetchDataSuccessUsesStubContent() async {
+        var reported: (name: String, duration: TimeInterval)?
+        let viewModel = MainViewViewModel(
+            imageProvider: UITestStubImageProvider(),
+            timer: AnalyticsTimer(reportName: "downloading") { name, duration in
+                reported = (name, duration)
+            }
+        )
+
+        await viewModel.fetchData()
+
+        XCTAssertFalse(viewModel.viewProperties.isLoading)
+        XCTAssertEqual(viewModel.viewProperties.imageURL, UITestStubImageProvider.stubImageURL)
+        XCTAssertEqual(viewModel.viewProperties.title, UITestStubImageProvider.stubTitle)
+        XCTAssertEqual(viewModel.viewProperties.description, UITestStubImageProvider.stubDescription)
+        XCTAssertEqual(reported?.name, "downloading")
+        XCTAssertGreaterThanOrEqual(reported?.duration ?? -1, 0)
+    }
+
+    func testFetchDataDecodesHTMLAndPicksPreferredImage() async {
         let item = TestFixtures.item(
             title: "Apollo &amp; Friends",
             description: "Hello &#0146; world",
@@ -24,23 +43,16 @@ final class MainViewViewModelTests: XCTestCase {
                 ]
             ))
         )
-        var reported: (name: String, duration: TimeInterval)?
         let viewModel = MainViewViewModel(
             imageProvider: provider,
-            timer: AnalyticsTimer(reportName: "downloading") { name, duration in
-                reported = (name, duration)
-            }
+            timer: AnalyticsTimer(reportName: "downloading") { _, _ in }
         )
 
         await viewModel.fetchData()
 
-        XCTAssertFalse(viewModel.viewProperties.isLoading)
         XCTAssertEqual(viewModel.viewProperties.imageURL, "https://cdn.example.com/large.jpg")
         XCTAssertEqual(viewModel.viewProperties.title, "Apollo & Friends")
-        XCTAssertNotNil(viewModel.viewProperties.description)
         XCTAssertFalse(viewModel.viewProperties.description?.contains("&#0146;") ?? true)
-        XCTAssertEqual(reported?.name, "downloading")
-        XCTAssertGreaterThanOrEqual(reported?.duration ?? -1, 0)
     }
 
     func testFetchDataFailureClearsLoadingWithoutCrashing() async {

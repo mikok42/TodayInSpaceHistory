@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct MainView: View {
     @State private var viewModel: MainViewViewModel
@@ -16,20 +15,24 @@ struct MainView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: StyleConstants.labelsMargins) {
-            header
-            dayLabel
-            imageSection
-            descriptionSection
+        if let error = viewModel.viewProperties.error { ErrorView(error: error, onDismiss: { viewModel.viewProperties.error = nil }) }
+        else {
+            VStack(alignment: .leading, spacing: StyleConstants.labelsMargins) {
+                header
+                dayLabel
+                imageSection
+                descriptionSection
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding()
+            .foregroundStyle(.white)
+            .background(.black)
+            .task {
+                guard viewModel.viewProperties.imageURL == nil else { return }
+                await viewModel.fetchData()
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding()
-        .foregroundStyle(.white)
-        .background(.black)
-        .task {
-            guard viewModel.viewProperties.imageURL == nil else { return }
-            await viewModel.fetchData()
-        }
+        
     }
 
     private var header: some View {
@@ -93,43 +96,5 @@ struct MainView: View {
 }
 
 #Preview("Loaded") {
-    let provider = MainViewPreviewImageProvider()
-    let viewModel = MainViewViewModel(imageProvider: provider)
-    viewModel.viewProperties.title = "EMS One Katowice 2014"
-    viewModel.viewProperties.description = "Virtus.pro lift the trophy at EMS One Katowice 2014."
-    viewModel.viewProperties.imageURL = provider.fileURL?.absoluteString
-    viewModel.viewProperties.isLoading = false
-    return MainView(viewModel: viewModel)
-}
-
-private struct MainViewPreviewImageProvider: ImageProviderServiceProtocol {
-    var fileURL: URL? {
-        if let url = Bundle.main.url(forResource: "PreviewMock", withExtension: "jpg") {
-            return url
-        }
-        guard let image = UIImage(named: "PreviewMock"),
-              let data = image.jpegData(compressionQuality: 0.9) else {
-            return nil
-        }
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("PreviewMock.jpg")
-        try? data.write(to: url)
-        return url
-    }
-
-    func loadTodaysImage() async throws -> (item: Item, imageURLs: [String]) {
-        guard let imageURL = fileURL else {
-            throw Errors.ImageProvider.missingAssetURL
-        }
-        let result = SearchResult(
-            center: nil,
-            dateCreated: "2014-03-16T00:00:00Z",
-            description: "Virtus.pro lift the trophy at EMS One Katowice 2014.",
-            keywords: nil,
-            mediaType: "image",
-            nasaId: "preview-mock",
-            title: "EMS One Katowice 2014"
-        )
-        let item = Item(data: [result], links: nil, href: nil)
-        return (item, [imageURL.absoluteString])
-    }
+    MainView(viewModel: MainViewViewModel(imageProvider: UITestStubImageProvider()))
 }

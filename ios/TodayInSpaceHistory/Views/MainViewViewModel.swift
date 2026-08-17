@@ -36,6 +36,11 @@ final class MainViewViewModel {
         self.viewProperties = .init()
     }
     
+    func reload() async {
+        viewProperties = .init()
+        await fetchData()
+    }
+    
     @MainActor
     func fetchData() async {
         viewProperties.isLoading = true
@@ -56,6 +61,7 @@ final class MainViewViewModel {
     }
     
     private func apply(item: Item, imageURLs: [String]) {
+        viewProperties.error = nil
         viewProperties.imageURL = imageURLs.first {
             $0.contains("large") || $0.contains("medium") || $0.contains("original")
         }
