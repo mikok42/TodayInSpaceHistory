@@ -54,8 +54,9 @@ class MainViewModel(
         }
     }
 
-    fun dismissError() {
-        _uiState.update { it.copy(error = null) }
+    fun reload() {
+        _uiState.value = MainUiState()
+        fetchData()
     }
 
     private fun apply(payload: TodaysImage) {

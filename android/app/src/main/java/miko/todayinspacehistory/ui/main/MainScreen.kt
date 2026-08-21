@@ -44,7 +44,7 @@ fun MainScreen(
     if (error != null) {
         ErrorView(
             error = error,
-            onDismiss = viewModel::dismissError,
+            onDismiss = viewModel::reload,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black),
