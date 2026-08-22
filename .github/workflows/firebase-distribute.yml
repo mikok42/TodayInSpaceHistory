@@ -40,6 +40,12 @@ jobs:
           path: android/app/build/reports/tests/testDebugUnitTest/
           if-no-files-found: ignore
 
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: UI tests on emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -107,6 +113,7 @@ jobs:
             -project TodayInSpaceHistory.xcodeproj \
             -scheme TodayInSpaceHistory \
             -destination "id=$DEST_ID" \
+            -enableCodeCoverage NO \
             -resultBundlePath "$RUNNER_TEMP/TodayInSpaceHistory.xcresult"
 
       - name: Upload xcresult
